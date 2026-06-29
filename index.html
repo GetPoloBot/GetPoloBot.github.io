@@ -111,6 +111,10 @@
   .nav-link:hover{color:var(--text);background:rgba(255,255,255,.05)}
   .nav-dl{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1208;font-weight:700;font-size:13.5px;padding:8px 16px;border-radius:9px;transition:.15s;box-shadow:0 4px 16px rgba(245,158,11,.28)}
   .nav-dl:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(245,158,11,.42)}
+  .lang-switch{display:inline-flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:2px;margin-left:2px}
+  .lang-flag{background:transparent;border:none;font-size:16px;line-height:1;padding:4px 7px;border-radius:7px;cursor:pointer;opacity:.4;filter:grayscale(.6);transition:.15s}
+  .lang-flag:hover{opacity:.85;filter:none}
+  .lang-flag.active{opacity:1;filter:none;background:rgba(245,158,11,.16)}
 
   /* HERO */
   .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:62px 0 36px}
@@ -430,7 +434,7 @@
   .step p{color:var(--dim);font-size:14px}
 
   /* FAQ */
-  .faq{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+  .faq{max-width:940px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:11px;align-items:start}
   .faq details{background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden}
   .faq summary{list-style:none;cursor:pointer;padding:17px 20px;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:space-between;gap:12px}
   .faq summary::-webkit-details-marker{display:none}
@@ -483,6 +487,7 @@
     .nav-link{display:none}.chat-label{display:none}
     .bento{grid-template-columns:1fr}.b.big{grid-column:span 1}
     .plans{grid-template-columns:1fr}
+    .faq{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -499,7 +504,10 @@
       <a class="nav-link" href="#notibot">Notibot</a>
       <a class="nav-link" href="#planes">Planes</a>
       <a class="nav-link" href="#faq">FAQ</a>
-      <button id="langBtn" onclick="toggleLang()" style="background:transparent;border:1px solid var(--border2);color:var(--dim);font:700 12.5px 'DM Sans',sans-serif;padding:6px 11px;border-radius:8px;cursor:pointer;margin-left:2px;transition:.15s" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='var(--dim)';this.style.borderColor='var(--border2)'">EN</button>
+      <span class="lang-switch">
+        <button class="lang-flag" id="flagEs" onclick="setLang('es')" title="Español">🇪🇸</button>
+        <button class="lang-flag" id="flagEn" onclick="setLang('en')" title="English">🇬🇧</button>
+      </span>
       <a class="nav-dl" href="https://github.com/GetPoloBot/polobot-control/releases/latest/download/PoloBot_Setup.exe">⬇ Descargar</a>
     </div>
   </nav>
@@ -1142,17 +1150,18 @@
       });
       document.documentElement.lang = lang;
       localStorage.setItem('pb_lang', lang);
-      const b = document.getElementById('langBtn');
-      if (b) b.textContent = (lang === 'es') ? 'EN' : 'ES';
+      const fe = document.getElementById('flagEs'), fn = document.getElementById('flagEn');
+      if (fe) fe.classList.toggle('active', lang === 'es');
+      if (fn) fn.classList.toggle('active', lang === 'en');
     }
+    window.setLang = setLang;
     window.toggleLang = function(){
       const cur = localStorage.getItem('pb_lang') || 'es';
       setLang(cur === 'es' ? 'en' : 'es');
     };
     let lang = localStorage.getItem('pb_lang');
     if (!lang) lang = (navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en';
-    if (lang === 'en') setLang('en');
-    else { const b = document.getElementById('langBtn'); if (b) b.textContent = 'EN'; }
+    setLang(lang);
   })();
   </script>
 
