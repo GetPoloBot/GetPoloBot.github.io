@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PoloBot — Automatización para Metin2</title>
+<meta name="description" content="PoloBot: el arsenal de automatización definitivo para Metin2. Autocaza, autopesca, vidente, barajas, control desde Telegram y más, en piloto automático.">
+<link rel="icon" href="Polobots_logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Cinzel:wght@500;600;700;800;900&family=Pirata+One&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#121212; --darker:#0d0d0d; --surface:#1c1c1c; --card:#222222;
+    --border:#333333; --border2:#3d3d3d;
+    --gold:#f59e0b; --gold-soft:#fbbf24; --gold-deep:#b9770a;
+    --accent:#e63946; --red:#ef4444; --green:#22c55e; --blue:#3b82f6;
+    --purple:#8b5cf6; --cyan:#06b6d4; --text:#e8e8e8; --dim:#8a8a8a;
+    --faint:#5a5a5a; --tg:#229ed9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;position:relative}
+  body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(760px 400px at 78% -6%,rgba(245,158,11,.14),transparent 70%),radial-gradient(640px 440px at 12% 4%,rgba(230,57,70,.11),transparent 70%),radial-gradient(700px 540px at 50% 60%,rgba(139,92,246,.05),transparent 70%)}
+  body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 95% at 50% 0%,transparent 52%,rgba(0,0,0,.6) 100%)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.left{transform:translateX(-44px)}
+  .reveal.right{transform:translateX(44px)}
+  .reveal.zoom{transform:scale(.93)}
+  .reveal.in{opacity:1;transform:none}
+  /* cascada: los hijos entran uno tras otro */
+  .stagger>*{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+  .stagger.in>*{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){
+    .reveal,.stagger>*{transition:none;opacity:1;transform:none}
+  }
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:40;background:rgba(13,13,13,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .nav-in{max-width:1120px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:12px}
+  .nav-logo{width:30px;height:30px;object-fit:contain;filter:invert(1);mix-blend-mode:screen}
+  .nav-brand{font-family:'Cinzel',serif;font-weight:700;letter-spacing:1px;font-size:17px}
+  .nav-brand b{color:var(--gold)}
+  .nav-spacer{flex:1}
+  .nav-link{color:var(--dim);font-size:13.5px;font-weight:600;padding:7px 11px;border-radius:8px;transition:.15s}
+  .nav-link:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .nav-dl{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1208;font-weight:700;font-size:13.5px;padding:8px 16px;border-radius:9px;transition:.15s;box-shadow:0 4px 16px rgba(245,158,11,.28)}
+  .nav-dl:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(245,158,11,.42)}
+
+  /* HERO */
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:62px 0 36px}
+  .hero-kicker{display:inline-flex;align-items:center;gap:9px;font-family:'Pirata One',cursive;letter-spacing:2.5px;color:var(--accent);font-size:16px;text-transform:uppercase;margin-bottom:14px}
+  .hero-kicker::before,.hero-kicker::after{content:"";width:26px;height:1px;background:linear-gradient(90deg,transparent,var(--accent))}
+  .hero-kicker::after{background:linear-gradient(90deg,var(--accent),transparent)}
+  .hero h1{font-family:'Cinzel',serif;font-weight:900;font-size:60px;line-height:1.03;letter-spacing:1px;margin-bottom:16px}
+  .hero h1 .g{background:linear-gradient(180deg,#fff 25%,var(--gold-soft) 75%,var(--gold-deep));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 4px 18px rgba(245,158,11,.25))}
+  .hero p.sub{color:var(--dim);font-size:18px;max-width:480px;margin-bottom:26px}
+  .hero-cta{display:flex;gap:13px;flex-wrap:wrap;align-items:center}
+  .btn-gold{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1208;font-weight:800;font-size:16px;padding:15px 28px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 10px 30px rgba(245,158,11,.30);transition:.15s}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(245,158,11,.45)}
+  .btn-ghost{display:inline-flex;align-items:center;gap:9px;color:var(--text);font-weight:600;font-size:15px;padding:14px 22px;border-radius:12px;border:1px solid var(--border2);transition:.15s}
+  .btn-ghost:hover{border-color:var(--gold);background:rgba(245,158,11,.06)}
+  .hero-mini{margin-top:16px;display:flex;gap:18px;color:var(--faint);font-size:12.5px;flex-wrap:wrap}
+  .hero-mini span{display:inline-flex;align-items:center;gap:6px}
+  .hero-mini .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+
+  /* MAQUETA APP (dinámica) */
+  .mock-stage{display:flex;justify-content:center;position:relative}
+  .mock-stage::before{content:"";position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.16),transparent 65%);filter:blur(8px)}
+  /* carrusel de capturas reales */
+  .shot-stage{display:flex;flex-direction:column;align-items:center;position:relative}
+  .shot-stage::before{content:"";position:absolute;top:46%;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.15),transparent 66%);filter:blur(10px);transform:translateY(-50%)}
+  .shot-frame{position:relative;width:100%;max-width:480px;height:460px;display:flex;align-items:center;justify-content:center;animation:float 5.5s ease-in-out infinite}
+  .shot{position:absolute;max-width:100%;max-height:100%;object-fit:contain;border-radius:14px;border:1px solid var(--border2);box-shadow:0 28px 64px rgba(0,0,0,.6);opacity:0;will-change:transform,opacity}
+  /* puntero falso que "navega" */
+  .fake-cursor{position:absolute;left:0;top:0;z-index:6;width:20px;height:20px;pointer-events:none;transition:transform .62s cubic-bezier(.5,.1,.25,1);filter:drop-shadow(0 2px 5px rgba(0,0,0,.6))}
+  .fake-cursor svg{width:100%;height:100%;display:block}
+  .fake-cursor::after{content:"";position:absolute;left:-7px;top:-7px;width:30px;height:30px;border-radius:50%;border:2px solid var(--gold);opacity:0}
+  .fake-cursor.tap::after{animation:tapR .45s ease-out}
+  @keyframes tapR{0%{transform:scale(.3);opacity:.85}100%{transform:scale(1.4);opacity:0}}
+  .mock{position:relative;width:300px;background:var(--bg);border:1px solid var(--border2);border-radius:20px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.6);animation:float 5s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  .mock-bar{display:flex;align-items:center;gap:8px;padding:11px 14px;background:var(--darker);border-bottom:1px solid var(--border)}
+  .mock-bar .dots{display:flex;gap:5px}
+  .mock-bar .dots i{width:9px;height:9px;border-radius:50%;display:block}
+  .mock-bar .dots i:nth-child(1){background:#e63946}.mock-bar .dots i:nth-child(2){background:#f59e0b}.mock-bar .dots i:nth-child(3){background:#22c55e}
+  .mock-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:.5px;margin-left:4px}
+  .mock-title b{color:var(--gold)}
+  .mock-title #demoTitle{color:var(--faint);font-weight:400;font-family:'DM Sans'}
+  .mock-pill{margin-left:auto;font-size:10px;color:var(--dim);border:1px solid var(--border);border-radius:6px;padding:2px 7px}
+  .mock-screen{padding:13px;height:430px;overflow:hidden;display:flex;flex-direction:column;justify-content:center;transition:opacity .35s ease}
+  .mock-label{font-size:10px;letter-spacing:1.5px;color:var(--faint);margin-bottom:10px;font-weight:600}
+  .mock-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .mc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 10px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px}
+  .mc .ic{font-size:22px;margin-bottom:2px}
+  .mc .nm{font-size:10px;font-weight:700;letter-spacing:.5px}
+  .mc .ds{font-size:9px;color:var(--dim);line-height:1.4}
+  .mc .bdg{font-size:9px;font-weight:600;margin-top:2px;color:var(--dim)}
+  .mc .bdg.on{color:var(--green)}
+  .mc.dev{opacity:.55}
+  /* estados "corriendo" */
+  .m-run{display:flex;flex-direction:column;gap:11px}
+  .m-run.center{align-items:center;justify-content:center;text-align:center;padding-top:8px}
+  .m-head{display:flex;align-items:center;gap:11px}
+  .m-head .mi{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;background:color-mix(in srgb,var(--rc,#e63946) 18%,transparent);border:1px solid color-mix(in srgb,var(--rc,#e63946) 38%,transparent)}
+  .m-nm{font-size:14px;font-weight:700;letter-spacing:.4px}
+  .m-state{font-size:10.5px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:5px;margin-top:2px}
+  .m-state i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 7px var(--green);animation:blink 1.1s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+  .m-bars{display:flex;flex-direction:column;gap:7px}
+  .m-bar{display:flex;align-items:center;gap:8px;font-size:9.5px;color:var(--dim)}
+  .m-bar span{width:18px;font-weight:700}
+  .m-bar .t{flex:1;height:7px;border-radius:6px;background:#000;overflow:hidden}
+  .m-bar .t i{display:block;height:100%;border-radius:6px}
+  .m-log{background:#000;border:1px solid var(--border);border-radius:9px;padding:9px 10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#9fb6a3;line-height:1.7}
+  .m-log div{opacity:.5}.m-log div:last-child{opacity:1;color:var(--green)}
+  .m-list{display:flex;flex-direction:column;gap:6px}
+  .m-li{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:8px 11px;font-size:10.5px}
+  .m-li b{color:var(--green);font-size:9.5px}
+  .m-btn{margin-top:2px;text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.5px;padding:9px;border-radius:9px;background:color-mix(in srgb,var(--red) 18%,transparent);color:#ff9b95;border:1px solid color-mix(in srgb,var(--red) 35%,transparent)}
+  .ring{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:6px auto 4px;background:conic-gradient(var(--cyan) var(--p,65%),#000 0);position:relative}
+  .ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--bg)}
+  .ring b{position:relative;font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--cyan)}
+  .m-sub{font-size:10px;color:var(--faint)}
+  .mock-nav{display:flex;border-top:1px solid var(--border);background:var(--darker)}
+  .mock-nav div{flex:1;text-align:center;padding:9px 0;font-size:9.5px;font-weight:700;letter-spacing:.5px;color:var(--faint)}
+  .mock-nav div.act{color:var(--gold)}
+  .mock-nav div .mi{display:block;font-size:14px;margin-bottom:2px}
+  .demo-dots{display:flex;gap:6px;justify-content:center;margin-top:14px}
+  .demo-dots i{width:6px;height:6px;border-radius:50%;background:var(--border2);display:block;transition:.2s}
+  .demo-dots i.on{background:var(--gold);width:18px;border-radius:6px}
+  /* pantallas fieles a la app */
+  .mk-perfil{display:flex;align-items:center;gap:7px;margin-bottom:10px;font-size:10px}
+  .mk-perfil .lbl{color:var(--dim)}
+  .mk-chip{background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:7px;padding:2px 8px;font-weight:700}
+  .mk-perfil .st{margin-left:auto;color:var(--green);font-weight:700;display:flex;align-items:center;gap:4px}
+  .mk-perfil .st .d{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 1.1s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+  .mk-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 10px;margin-bottom:8px}
+  .mk-stat .top{display:flex;align-items:center;gap:7px;font-size:10px;margin-bottom:6px}
+  .mk-stat .top .ic{font-size:12px}.mk-stat .top .nm{font-weight:600}
+  .mk-stat .top .pct{margin-left:auto;font-weight:700;font-family:'JetBrains Mono',monospace}
+  .mk-bar{height:7px;border-radius:6px;background:#000;overflow:hidden;margin-bottom:6px}
+  .mk-bar i{display:block;height:100%;border-radius:6px}
+  .mk-stat .bot{display:flex;align-items:center;gap:8px;font-size:8.5px;color:var(--dim)}
+  .mk-key{background:#000;border:1px solid var(--border);border-radius:6px;padding:2px 6px}
+  .mk-usar{margin-left:auto;display:flex;align-items:center;gap:4px}
+  .mk-usar b{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:var(--text)}
+  .mk-ctrl{display:flex;gap:9px;justify-content:center;margin:11px 0 9px}
+  .mk-cbtn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--border2);font-size:13px}
+  .mk-cbtn.play{background:color-mix(in srgb,var(--accent) 22%,transparent);border-color:var(--accent);color:#ff8a8a}
+  .mk-cbtn.stop{color:var(--faint)} .mk-cbtn.cal{color:var(--gold)}
+  .mk-log{background:#000;border:1px solid var(--border);border-radius:8px;padding:8px 9px;font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#9fb6a3;line-height:1.7}
+  .mk-log div{opacity:.55}.mk-log div:last-child{opacity:1;color:var(--green)}
+  .mk-logtools{display:flex;align-items:center;justify-content:space-between;font-size:9.5px;color:var(--dim);margin-bottom:9px}
+  .mk-logtools b{font-weight:700;letter-spacing:.5px}
+  .mk-logtools .clr{border:1px solid var(--border);border-radius:6px;padding:2px 8px;color:var(--faint)}
+  .mk-loglist{display:flex;flex-direction:column;gap:6px}
+  .mk-logitem{display:flex;align-items:center;gap:7px;font-size:9px;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:6px 8px}
+  .mk-logitem .em{font-size:11px}.mk-logitem .tm{color:var(--faint);font-family:'JetBrains Mono',monospace}
+  .mk-logitem .tx{color:var(--dim)}
+  .mk-modgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .mk-modc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 10px}
+  .mk-modc .row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+  .mk-modc .em{font-size:18px}
+  .mk-knob{width:30px;height:17px;border-radius:10px;background:#000;border:1px solid var(--border);position:relative;flex-shrink:0}
+  .mk-knob i{position:absolute;top:1px;left:1px;width:13px;height:13px;border-radius:50%;background:var(--faint);transition:.2s}
+  .mk-knob.on{background:color-mix(in srgb,var(--green) 28%,#000);border-color:var(--green)}
+  .mk-knob.on i{left:14px;background:var(--green);box-shadow:0 0 6px var(--green)}
+  .mk-modc .nm{font-size:10.5px;font-weight:700}
+  .mk-modc .stt{font-size:9px;color:var(--green);margin-top:1px}
+  .mk-modc .stt.off{color:var(--faint)}
+  /* ── pantallas fieles: clases reales de la app, con su paleta ── */
+  .mock{--bg:#1a1a1a;--surface:#222;--card:#2a2a2a;--darker:#141414;--border:#333;--dim:#7d7d7d}
+  .mock-screen .ovh{display:flex;align-items:center;gap:7px;padding:0 0 9px;border-bottom:1px solid var(--border);margin-bottom:10px}
+  .mock-screen .ovh-ic{font-size:16px}
+  .mock-screen .ovh-t{font-size:12.5px;font-weight:600}
+  .mock-screen .perfil-row{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+  .mock-screen .perfil-label{font-size:9px;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.6px}
+  .mock-screen .perfil-chip{font-size:10px;padding:2px 8px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text)}
+  .mock-screen .perfil-chip.gold{color:var(--gold);border-color:var(--gold)}
+  .mock-screen .status-dot{font-size:9px;color:var(--dim)}
+  .mock-screen .status-dot.on{color:var(--green)}
+  .mock-screen .status-txt{font-size:10px;color:var(--dim);font-weight:500}
+  .mock-screen .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+  .mock-screen .stat-card-top{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+  .mock-screen .stat-icon{font-size:13px;font-weight:700}
+  .mock-screen .stat-icon.hp{color:var(--red)} .mock-screen .stat-icon.mp{color:var(--blue)}
+  .mock-screen .stat-name{font-size:10px;color:var(--text);flex:1}
+  .mock-screen .stat-pct{font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace}
+  .mock-screen .stat-bar-wrap{background:var(--darker);border-radius:3px;height:5px;margin-bottom:6px;overflow:hidden}
+  .mock-screen .stat-bar{height:100%;border-radius:3px}
+  .mock-screen .stat-bar.hp{background:var(--red)} .mock-screen .stat-bar.mp{background:var(--blue)}
+  .mock-screen .stat-card-bot{display:flex;align-items:center;gap:8px}
+  .mock-screen .key-chip{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text)}
+  .mock-screen .thr-row{display:flex;align-items:center;gap:3px;margin-left:auto}
+  .mock-screen .thr-label{font-size:9px;color:var(--dim)}
+  .mock-screen .thr-btn{width:18px;height:18px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--text);font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1}
+  .mock-screen .thr-val{font-size:10px;min-width:20px;text-align:center;color:var(--text)}
+  .mock-screen .thr-pct{font-size:10px;color:var(--dim)}
+  .mock-screen .death-row{display:flex;align-items:center;gap:5px;padding:2px 0}
+  .mock-screen .death-dot{font-size:10px} .mock-screen .death-lbl{font-size:10px;color:var(--dim)}
+  .mock-screen .ctrl-row{display:flex;gap:6px;justify-content:center;padding:6px 0}
+  .mock-screen .ctrl-btn{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;background:var(--card);color:var(--text)}
+  .mock-screen .ctrl-btn.accent{background:var(--accent);color:#fff}
+  .mock-screen .ctrl-btn.gold{background:var(--gold);color:#111}
+  .mock-screen .ctrl-btn.dim{background:var(--card);color:var(--dim);border:1px solid var(--border)}
+  .mock-screen .mini-log{background:var(--darker);border:1px solid var(--border);border-radius:6px;padding:5px 7px;font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.6;color:#777;min-height:46px}
+  .mock-screen .mini-log .ok{color:var(--green)}
+  .mock-screen .mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .mock-screen .mod-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 10px 10px}
+  .mock-screen .mod-card.dev{opacity:.5}
+  .mock-screen .mod-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+  .mock-screen .mod-card-emoji{font-size:22px;line-height:1}
+  .mock-screen .mod-card-name{font-size:10px;font-weight:700;letter-spacing:.4px;margin-bottom:3px}
+  .mock-screen .mod-card-status{font-size:9px;color:var(--dim)} .mock-screen .mod-card-status.on{color:var(--green)}
+  .mock-screen .knob{width:30px;height:16px;background:var(--border);border-radius:8px;position:relative;flex-shrink:0}
+  .mock-screen .knob.on{background:var(--accent)}
+  .mock-screen .knob::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.4);transition:left .2s}
+  .mock-screen .knob.on::after{left:16px}
+  .mock-screen .logs-toolbar{display:flex;align-items:center;justify-content:space-between;padding:0 0 8px;border-bottom:1px solid var(--border);margin-bottom:8px}
+  .mock-screen .logs-lbl{font-size:9px;font-weight:700;letter-spacing:.8px;color:var(--dim);text-transform:uppercase}
+  .mock-screen .logs-clear{font-size:9px;color:var(--faint);border:1px solid var(--border);border-radius:5px;padding:2px 8px}
+  .mock-screen .uni-log{font-family:'JetBrains Mono',monospace;font-size:9.5px;line-height:1.85;color:var(--dim)}
+  .mock-screen .uni-log .tm{color:var(--faint)}
+  .mock-screen .ctrl-btn.red{background:var(--red);color:#fff}
+  .mock-screen .ring-wrap{position:relative;width:96px;height:96px;margin:4px auto 2px}
+  .mock-screen .ring-svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .mock-screen .ring-bg{fill:none;stroke:var(--card);stroke-width:8}
+  .mock-screen .ring-fg{fill:none;stroke:var(--gold);stroke-width:8;stroke-linecap:round}
+  .mock-screen .ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .mock-screen .ring-time{font-family:'JetBrains Mono',monospace;font-size:17px;color:var(--text)}
+  .mock-screen .ring-label{font-size:8px;font-weight:700;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-top:2px}
+  .mock-screen .chips-row{display:flex;gap:16px;justify-content:center;margin:6px 0 4px}
+  .mock-screen .chip{display:flex;flex-direction:column;align-items:center;gap:1px}
+  .mock-screen .chip-val{font-size:18px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text)}
+  .mock-screen .chip-val.gold{color:var(--gold)}
+  .mock-screen .chip-lbl{font-size:8px;letter-spacing:.8px;color:var(--dim);text-transform:uppercase}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 6px}
+  .stat{background:linear-gradient(180deg,var(--card),var(--surface));border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center}
+  .stat .n{font-family:'Cinzel',serif;font-weight:800;font-size:26px;color:var(--gold)}
+  .stat .l{color:var(--dim);font-size:12.5px;margin-top:2px}
+
+  /* SECCIONES */
+  .sec{padding:56px 0}
+  .sec-head{text-align:center;margin-bottom:40px}
+  .sec-head .eyebrow{font-family:'Pirata One',cursive;letter-spacing:3px;color:var(--accent);font-size:15px;text-transform:uppercase}
+  .sec-head h2{font-family:'Cinzel',serif;font-weight:700;font-size:33px;letter-spacing:1px;margin:5px 0 8px}
+  .sec-head p{color:var(--dim);font-size:15.5px;max-width:620px;margin:0 auto}
+  .divider{display:flex;align-items:center;justify-content:center;gap:14px;max-width:320px;margin:0 auto;color:var(--gold)}
+  .divider::before,.divider::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(245,158,11,.4))}
+  .divider::after{background:linear-gradient(90deg,rgba(245,158,11,.4),transparent)}
+  .divider span{font-size:12px;opacity:.75}
+
+  /* ¿QUÉ ES? */
+  .about{display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:center}
+  .about h2{font-family:'Cinzel',serif;font-size:30px;letter-spacing:.5px;margin-bottom:14px}
+  .about h2 b{color:var(--gold)}
+  .about p{color:var(--dim);font-size:15.5px;margin-bottom:14px}
+  .about .pts{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:4px}
+  .about .pts li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px}
+  .about .pts .ck{flex-shrink:0;width:22px;height:22px;border-radius:7px;background:color-mix(in srgb,var(--gold) 18%,transparent);border:1px solid color-mix(in srgb,var(--gold) 38%,transparent);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:1px}
+  .about-card{background:linear-gradient(180deg,var(--card),var(--surface));border:1px solid var(--border);border-radius:18px;padding:26px}
+  .about-card .row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+  .about-card .row:last-child{border-bottom:none}
+  .about-card .e{font-size:24px}
+  .about-card .row b{display:block;font-size:14.5px}
+  .about-card .row small{color:var(--dim);font-size:12.5px}
+
+  /* SPOTLIGHT */
+  .spot{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;margin-bottom:30px}
+  .spot:nth-child(even) .spot-visual{order:-1}
+  .spot-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--sc,var(--gold));border:1px solid color-mix(in srgb,var(--sc,var(--gold)) 40%,transparent);background:color-mix(in srgb,var(--sc,var(--gold)) 12%,transparent);padding:4px 11px;border-radius:20px;margin-bottom:13px}
+  .spot h3{font-family:'Cinzel',serif;font-size:25px;margin-bottom:9px;letter-spacing:.5px}
+  .spot p{color:var(--dim);font-size:15px;margin-bottom:14px}
+  .spot ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .spot li{display:flex;align-items:flex-start;gap:9px;font-size:14px}
+  .spot li::before{content:"✦";color:var(--sc,var(--gold));font-size:13px;margin-top:2px}
+  .spot-visual{background:linear-gradient(180deg,var(--card),var(--surface));border:1px solid var(--border);border-radius:18px;padding:30px;min-height:200px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .spot-visual::before{content:"";position:absolute;inset:0;background:radial-gradient(360px 160px at 50% 0%,color-mix(in srgb,var(--sc,var(--gold)) 16%,transparent),transparent 70%)}
+  .spot-emoji{font-size:78px;position:relative;filter:drop-shadow(0 10px 26px rgba(0,0,0,.5))}
+
+  /* BENTO */
+  .bento{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+  .b{position:relative;background:linear-gradient(180deg,var(--card),var(--surface));border:1px solid var(--border);border-radius:16px;padding:20px;overflow:hidden;transition:transform .16s,border-color .16s,box-shadow .16s}
+  .b::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:var(--mc,var(--gold));opacity:.7}
+  .b:hover{transform:translateY(-4px);border-color:var(--mc,var(--gold));box-shadow:0 16px 38px rgba(0,0,0,.45)}
+  .b .ico{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:25px;margin-bottom:13px;background:color-mix(in srgb,var(--mc,var(--gold)) 16%,transparent);border:1px solid color-mix(in srgb,var(--mc,var(--gold)) 35%,transparent)}
+  .b h3{font-size:16px;margin-bottom:5px;font-weight:700}
+  .b p{color:var(--dim);font-size:13px;line-height:1.5}
+  .b.big{grid-column:span 2}
+  .b .tag{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:10.5px;font-weight:700;letter-spacing:.5px;color:var(--mc,var(--gold));text-transform:uppercase}
+  .b .tag .d{width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 7px currentColor}
+
+  /* NOTIBOT */
+  .noti{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+  .noti .feat{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:18px}
+  .noti .feat li{display:flex;gap:13px;align-items:flex-start}
+  .noti .feat .fi{flex-shrink:0;width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;background:color-mix(in srgb,var(--tg) 16%,transparent);border:1px solid color-mix(in srgb,var(--tg) 36%,transparent)}
+  .noti .feat b{display:block;font-size:14.5px}
+  .noti .feat small{color:var(--dim);font-size:13px}
+  .tg-phone{background:linear-gradient(180deg,#17212b,#0e1621);border:1px solid #243240;border-radius:22px;padding:14px;width:340px;max-width:340px;margin:0 auto;box-shadow:0 30px 60px rgba(0,0,0,.55)}
+  .tg-top{display:flex;align-items:center;gap:10px;padding:6px 6px 12px;border-bottom:1px solid #243240;margin-bottom:12px}
+  .tg-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--tg),#2bb0ec);display:flex;align-items:center;justify-content:center;font-size:17px;overflow:hidden}
+  .tg-av img{width:24px;height:24px;object-fit:contain;filter:invert(1);mix-blend-mode:screen}
+  .tg-top b{font-size:14px}.tg-top small{display:block;color:#5dd05d;font-size:11px}
+  .tg-chat{display:flex;flex-direction:column;justify-content:flex-end;gap:8px;height:300px;overflow:hidden}
+  .bub{max-width:82%;padding:8px 12px;border-radius:14px;font-size:12.5px;line-height:1.45;animation:bubIn .32s cubic-bezier(.2,.8,.2,1)}
+  .bub.in{background:#222e3a;border-bottom-left-radius:4px;align-self:flex-start}
+  .bub.out{background:linear-gradient(135deg,#2b5278,#3a6ea5);border-bottom-right-radius:4px;align-self:flex-end}
+  .bub .t{font-size:9.5px;opacity:.6;text-align:right;margin-top:2px}
+  @keyframes bubIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+  .bub.typing{display:flex;gap:4px;padding:11px 14px}
+  .bub.typing i{width:6px;height:6px;border-radius:50%;background:#8aa0b4;display:block;animation:typD 1.1s infinite}
+  .bub.typing i:nth-child(2){animation-delay:.18s}.bub.typing i:nth-child(3){animation-delay:.36s}
+  @keyframes typD{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+
+  /* EN ACCIÓN */
+  .action-frame{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--border2);background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+  .action-frame video{width:100%;height:100%;object-fit:cover;display:block}
+  .action-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;background:radial-gradient(600px 300px at 50% 40%,rgba(245,158,11,.10),transparent 70%)}
+  .action-ph .play{width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;font-size:30px;color:#1a1208;box-shadow:0 12px 34px rgba(245,158,11,.4)}
+  .action-ph .cap{font-family:'Cinzel',serif;font-size:18px;letter-spacing:.5px}
+  .action-ph .sub{color:var(--dim);font-size:13.5px}
+  .action-note{text-align:center;color:var(--faint);font-size:12.5px;margin-top:12px}
+
+  /* POR QUÉ */
+  .why{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:16px}
+  .wcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px}
+  .wcard .wi{font-size:28px;margin-bottom:11px}
+  .wcard h3{font-size:16.5px;margin-bottom:6px}
+  .wcard p{color:var(--dim);font-size:13.5px}
+
+  /* PLANES */
+  .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:16px;align-items:stretch}
+  .plan{position:relative;background:linear-gradient(180deg,var(--card),var(--surface));border:1px solid var(--border);border-radius:18px;padding:28px 24px;display:flex;flex-direction:column}
+  .plan.pop{border-color:var(--gold);box-shadow:0 18px 46px rgba(245,158,11,.16)}
+  .plan .ribbon{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1208;font-size:11px;font-weight:800;letter-spacing:.5px;padding:5px 14px;border-radius:20px;text-transform:uppercase;white-space:nowrap}
+  .plan.pop{padding-top:44px}
+  .plan .pn{font-family:'Cinzel',serif;font-size:19px;font-weight:700;margin-bottom:4px}
+  .plan .pd{color:var(--dim);font-size:13px;min-height:34px}
+  .plan .price{display:flex;align-items:flex-end;gap:5px;margin:14px 0 4px}
+  .plan .price .cur{font-size:18px;color:var(--gold);font-weight:700;margin-bottom:5px}
+  .plan .price .amt{font-family:'Cinzel',serif;font-size:42px;font-weight:800;line-height:1;color:#fff}
+  .plan .price .per{color:var(--dim);font-size:13px;margin-bottom:6px}
+  .plan .old{color:var(--faint);text-decoration:line-through;font-size:13px;margin-bottom:10px}
+  .plan .disc{display:inline-block;background:var(--accent);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:6px;margin-left:6px;text-decoration:none;vertical-align:middle}
+  .plan ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin:8px 0 20px}
+  .plan ul li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--text)}
+  .plan ul li::before{content:"✓";color:var(--green);font-weight:800}
+  .plan ul li.no{color:var(--faint)}
+  .plan ul li.no::before{content:"✕";color:var(--faint);font-weight:800}
+  .plan .pbtn{margin-top:auto;text-align:center;padding:12px;border-radius:11px;font-weight:700;font-size:14px;border:1px solid var(--border2);transition:.15s}
+  .plan .pbtn:hover{border-color:var(--gold);background:rgba(245,158,11,.06)}
+  .plan.pop .pbtn{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1208;border:none;box-shadow:0 8px 24px rgba(245,158,11,.32)}
+  .plans-note{text-align:center;color:var(--faint);font-size:12.5px;margin-top:16px}
+
+  /* PASOS */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .step{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 22px 22px;text-align:center}
+  .step .num{width:46px;height:46px;margin:0 auto 12px;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1208;font-family:'Cinzel',serif;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 8px 22px rgba(245,158,11,.32)}
+  .step h3{font-size:17px;margin-bottom:5px}
+  .step p{color:var(--dim);font-size:14px}
+
+  /* FAQ */
+  .faq{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+  .faq details{background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden}
+  .faq summary{list-style:none;cursor:pointer;padding:17px 20px;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";color:var(--gold);font-size:22px;font-weight:400;transition:transform .2s}
+  .faq details[open] summary::after{transform:rotate(45deg)}
+  .faq .a{padding:0 20px 18px;color:var(--dim);font-size:14px}
+
+  /* CTA FINAL */
+  .finalcta{text-align:center;background:linear-gradient(180deg,var(--surface),var(--darker));border:1px solid var(--border);border-radius:22px;padding:50px 26px;position:relative;overflow:hidden}
+  .finalcta::before{content:"";position:absolute;inset:0;background:radial-gradient(560px 220px at 50% 0%,rgba(245,158,11,.14),transparent 70%)}
+  .finalcta>*{position:relative}
+  .finalcta h2{font-family:'Cinzel',serif;font-size:32px;letter-spacing:.5px;margin-bottom:10px}
+  .finalcta p{color:var(--dim);margin-bottom:26px;font-size:16px}
+  .finalcta .row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn-tg{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--tg),#2bb0ec);color:#fff;font-weight:700;font-size:16px;padding:15px 28px;border-radius:12px;box-shadow:0 10px 30px rgba(34,158,217,.32);transition:.15s}
+  .btn-tg:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(34,158,217,.45)}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border);margin-top:50px;padding:32px 22px;text-align:center;color:var(--faint);font-size:13px}
+  footer .fbrand{font-family:'Cinzel',serif;color:var(--dim);letter-spacing:1px;font-weight:600;margin-bottom:4px}
+  footer a{color:var(--gold)}
+
+  /* BURBUJA */
+  .chat-fab{position:fixed;right:24px;bottom:24px;z-index:60;display:flex;align-items:center}
+  .chat-label{background:var(--card);border:1px solid var(--border2);color:var(--text);font-size:13.5px;font-weight:600;padding:11px 15px;border-radius:30px;margin-right:11px;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;transform:translateX(12px);transition:.2s;pointer-events:none}
+  .chat-fab:hover .chat-label{opacity:1;transform:translateX(0)}
+  .chat-btn{position:relative;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--tg),#2bb0ec);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(34,158,217,.5);cursor:pointer;transition:.15s}
+  .chat-btn:hover{transform:scale(1.07)}
+  .chat-btn svg{width:32px;height:32px;fill:#fff;position:relative;z-index:1}
+  .chat-btn::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--tg);opacity:.5;animation:pulse 2.2s infinite}
+  @keyframes pulse{0%{transform:scale(1);opacity:.5}70%{transform:scale(1.75);opacity:0}100%{opacity:0}}
+
+  @media(max-width:880px){
+    .hero,.about,.noti{grid-template-columns:1fr;text-align:center;gap:30px}
+    .hero-kicker{justify-content:center}
+    .hero-cta,.hero-mini{justify-content:center}
+    .hero p.sub{margin-left:auto;margin-right:auto}
+    .about{text-align:left}.about .pts{text-align:left}
+    .spot{grid-template-columns:1fr;gap:18px}.spot:nth-child(even) .spot-visual{order:0}
+    .bento{grid-template-columns:repeat(3,1fr)}
+    .steps{grid-template-columns:1fr}
+    .stats{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:560px){
+    .hero h1{font-size:44px}
+    .nav-link{display:none}.chat-label{display:none}
+    .bento{grid-template-columns:1fr}.b.big{grid-column:span 1}
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-in">
+      <img class="nav-logo" src="Polobots_logo.jpeg" alt="">
+      <span class="nav-brand"><b>Polo</b>Bot</span>
+      <span class="nav-spacer"></span>
+      <a class="nav-link" href="#que-es">Qué es</a>
+      <a class="nav-link" href="#modulos">Módulos</a>
+      <a class="nav-link" href="#notibot">Notibot</a>
+      <a class="nav-link" href="#planes">Planes</a>
+      <a class="nav-link" href="#faq">FAQ</a>
+      <a class="nav-dl" href="https://github.com/GetPoloBot/polobot-control/releases/latest/download/PoloBot_Setup.exe">⬇ Descargar</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="reveal in">
+      <div class="hero-kicker">⚜ Metin2 ⚜</div>
+      <h1>Domina el juego en <span class="g">piloto automático</span></h1>
+      <p class="sub">PoloBot es el arsenal todo-en-uno que caza, pesca, recolecta y farmea por ti — en una o varias cuentas a la vez, y lo controlas hasta desde tu celular.</p>
+      <div class="hero-cta">
+        <a class="btn-gold" href="https://github.com/GetPoloBot/polobot-control/releases/latest/download/PoloBot_Setup.exe">⬇ Descargar para Windows</a>
+        <a class="btn-ghost" href="#planes">Ver planes</a>
+      </div>
+      <div class="hero-mini">
+        <span><span class="dot"></span> Windows 10 / 11</span>
+        <span><span class="dot"></span> Multi-cuenta</span>
+        <span><span class="dot"></span> Control por Telegram</span>
+      </div>
+    </div>
+
+    <!-- Maqueta diseñada: navega sola por la app -->
+    <div class="mock-stage reveal in">
+      <div>
+        <div class="mock">
+          <div class="mock-bar">
+            <div class="dots"><i></i><i></i><i></i></div>
+            <div class="mock-title"><b>PoloBot</b> <span id="demoTitle">· Hub</span></div>
+            <div class="mock-pill">ES</div>
+          </div>
+          <div class="mock-screen" id="demoScreen"></div>
+          <div class="mock-nav">
+            <div class="act"><span class="mi">🏠</span>HUB</div>
+            <div><span class="mi">⚙️</span>CONFIG</div>
+            <div><span class="mi">📋</span>LOGS</div>
+          </div>
+          <div class="fake-cursor" id="fakeCursor">
+            <svg viewBox="0 0 24 24"><path d="M5 3l14 8-6 1.5L9 19z" fill="#fff" stroke="#111" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="demo-dots" id="demoDots"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <div class="stats stagger">
+    <div class="stat"><div class="n">8+</div><div class="l">Módulos</div></div>
+    <div class="stat"><div class="n">∞</div><div class="l">Multi-cuenta</div></div>
+    <div class="stat"><div class="n">24/7</div><div class="l">Sin parar</div></div>
+    <div class="stat"><div class="n">📲</div><div class="l">Control remoto</div></div>
+  </div>
+
+  <!-- ¿QUÉ ES? -->
+  <section class="sec" id="que-es">
+    <div class="about">
+      <div class="reveal left">
+        <h2>¿Qué es <b>PoloBot</b>?</h2>
+        <p>PoloBot es una aplicación de escritorio para <b>Metin2</b> que automatiza las tareas más repetitivas del juego: cazar, pescar, recolectar, jugar la vidente y más. Lo configuras una vez y trabaja por ti — solo, sin que tengas que estar pendiente.</p>
+        <p>Está pensado para jugadores que quieren <b>farmear más sin pasar horas frente a la pantalla</b>: deja varias cuentas trabajando a la vez y revisa el progreso cuando quieras, incluso desde tu celular por Telegram.</p>
+        <ul class="pts">
+          <li><span class="ck">✓</span> Una sola app con todos los módulos — no necesitas mil programas sueltos.</li>
+          <li><span class="ck">✓</span> Calibración visual sencilla: le muestras dónde está cada cosa y listo.</li>
+          <li><span class="ck">✓</span> Teclas de inicio, pausa y parada que funcionan en cualquier módulo.</li>
+          <li><span class="ck">✓</span> Se actualiza solo y conserva tu licencia y configuración.</li>
+        </ul>
+      </div>
+      <div class="about-card reveal right">
+        <div class="row"><span class="e">🎮</span><div><b>Para Metin2</b><small>Servidores privados y oficiales*</small></div></div>
+        <div class="row"><span class="e">🖥️</span><div><b>Windows 10 / 11</b><small>Instalador con todo incluido</small></div></div>
+        <div class="row"><span class="e">👥</span><div><b>Multi-cuenta</b><small>Varias ventanas en paralelo</small></div></div>
+        <div class="row"><span class="e">📲</span><div><b>Notibot</b><small>Lo controlas desde Telegram</small></div></div>
+        <div class="row"><span class="e">🛡️</span><div><b>Licencia segura</b><small>Activación por código de PC</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>⚔ ◆ ⚔</span></div>
+
+  <!-- NOTIBOT -->
+  <section class="sec" id="notibot">
+    <div class="sec-head reveal">
+      <div class="eyebrow">El plus</div>
+      <h2>Notibot — tu bot en el bolsillo</h2>
+      <p>Controla y vigila PoloBot desde Telegram, estés donde estés</p>
+    </div>
+    <div class="noti reveal">
+      <div>
+        <p style="color:var(--dim);font-size:15.5px">Conecta PoloBot con tu Telegram y tendrás el control total a distancia: recibe avisos en tiempo real y maneja cada módulo con un mensaje.</p>
+        <ul class="feat">
+          <li><span class="fi">🔔</span><div><b>Notificaciones en vivo</b><small>Capturas, eventos, alertas y cuando algo necesita tu atención.</small></div></li>
+          <li><span class="fi">🎮</span><div><b>Comandos a distancia</b><small>Inicia, pausa o detén cualquier módulo desde el chat.</small></div></li>
+          <li><span class="fi">📸</span><div><b>Captura de pantalla</b><small>Pide una foto de la app cuando quieras revisar el progreso.</small></div></li>
+          <li><span class="fi">📊</span><div><b>Estado completo</b><small>Consulta qué está corriendo, HP/MP, tiempos y más.</small></div></li>
+        </ul>
+      </div>
+      <div class="tg-phone">
+        <div class="tg-top"><div class="tg-av"><img src="Polobots_logo.jpeg" alt=""></div><div><b>PoloBot</b><small id="tgStatus">en línea</small></div></div>
+        <div class="tg-chat" id="tgChat"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>⚔ ◆ ⚔</span></div>
+
+  <!-- SPOTLIGHTS -->
+  <section class="sec" id="destacados">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Lo que lo hace distinto</div>
+      <h2>Poder real, sin esfuerzo</h2>
+      <p>No es solo "un bot" — es un sistema completo pensado para Metin2</p>
+    </div>
+    <div class="spot reveal" style="--sc:#e63946">
+      <div>
+        <span class="spot-tag">Autocaza</span>
+        <h3>Combate que piensa por ti</h3>
+        <p>Lanza tus habilidades en orden, se cura, revive y vuelve a la pelea. Tú solo eliges el perfil.</p>
+        <ul><li>Rotación de habilidades configurable</li><li>Curación automática por HP/MP</li><li>Resurrección y regreso a la zona</li></ul>
+      </div>
+      <div class="spot-visual"><div class="spot-emoji">⚔️</div></div>
+    </div>
+    <div class="spot reveal" style="--sc:#8b5cf6">
+      <div>
+        <span class="spot-tag">Vidente &amp; Barajas</span>
+        <h3>Multi-cuenta sin estar pendiente</h3>
+        <p>Juega la vidente en varias cuentas a la vez y reclama las barajas solo, con lectura por pantalla.</p>
+        <ul><li>Varias ventanas en paralelo</li><li>Estrategia optimizada</li><li>Reclamo automático de recompensas</li></ul>
+      </div>
+      <div class="spot-visual"><div class="spot-emoji">🔮</div></div>
+    </div>
+    <div class="spot reveal" style="--sc:#f59e0b">
+      <div>
+        <span class="spot-tag">Siempre al día</span>
+        <h3>Se actualiza solo</h3>
+        <p>Cuando sale una versión nueva, PoloBot la descarga e instala con un clic — sin reinstalar nada a mano.</p>
+        <ul><li>Aviso dentro de la app</li><li>Descarga e instalación automática</li><li>Conserva tu licencia y ajustes</li></ul>
+      </div>
+      <div class="spot-visual"><div class="spot-emoji">⬆️</div></div>
+    </div>
+  </section>
+
+  <div class="divider"><span>⚔ ◆ ⚔</span></div>
+
+  <!-- MÓDULOS -->
+  <section class="sec" id="modulos">
+    <div class="sec-head reveal">
+      <h2>Módulos</h2>
+    </div>
+    <div class="bento stagger">
+      <div class="b big" style="--mc:#e63946"><div class="ico">⚔️</div><h3>Autocaza</h3><p>Combate automático con habilidades, curación y resurrección. El corazón del farmeo.</p><span class="tag"><span class="d"></span>Activo</span></div>
+      <div class="b" style="--mc:#e63946"><div class="ico">🎒</div><h3>Autoloot</h3><p>Recoge fragmentos y materiales del suelo.</p><span class="tag"><span class="d"></span>Activo</span></div>
+      <div class="b" style="--mc:#06b6d4"><div class="ico">🎣</div><h3>Autopesca</h3><p>Pesca sola y detecta el tirón.</p><span class="tag"><span class="d"></span>Activo</span></div>
+      <div class="b" style="--mc:#22c55e"><div class="ico">🧩</div><h3>Rompecabezas</h3><p>Resuelve el minijuego de pesca de forma óptima.</p><span class="tag"><span class="d"></span>Activo</span></div>
+      <div class="b" style="--mc:#8b5cf6"><div class="ico">🔮</div><h3>Vidente</h3><p>Automático y multi-cuenta.</p><span class="tag"><span class="d"></span>Activo</span></div>
+      <div class="b" style="--mc:#f59e0b"><div class="ico">🃏</div><h3>Barajas</h3><p>Reclama las barajas de la vidente.</p><span class="tag"><span class="d"></span>Activo</span></div>
+      <div class="b big" style="--mc:#3b82f6"><div class="ico">🛡️</div><h3>Bloqueo EXP &amp; Eventos</h3><p>Bloquea y dona experiencia a tu gusto, y automatiza los botines de eventos especiales.</p><span class="tag"><span class="d"></span>Activo</span></div>
+    </div>
+  </section>
+
+  <div class="divider"><span>⚔ ◆ ⚔</span></div>
+
+  <!-- POR QUÉ -->
+  <section class="sec" id="porque">
+    <div class="sec-head reveal"><div class="eyebrow">Confianza</div><h2>¿Por qué PoloBot?</h2></div>
+    <div class="why stagger">
+      <div class="wcard"><div class="wi">🧩</div><h3>Todo en uno</h3><p>Caza, pesca, vidente, recolección y más en una sola app.</p></div>
+      <div class="wcard"><div class="wi">👥</div><h3>Multi-cuenta</h3><p>Maneja varias ventanas a la vez sin que se estorben.</p></div>
+      <div class="wcard"><div class="wi">⬆️</div><h3>Siempre actualizado</h3><p>Recibe mejoras y arreglos automáticamente, con un clic.</p></div>
+      <div class="wcard"><div class="wi">💬</div><h3>Soporte directo</h3><p>Te ayudamos por Telegram, rápido y de persona a persona.</p></div>
+    </div>
+  </section>
+
+  <div class="divider"><span>⚔ ◆ ⚔</span></div>
+
+  <!-- PLANES -->
+  <section class="sec" id="planes">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Licencias</div>
+      <h2>Planes &amp; ofertas</h2>
+      <p>Desde la prueba gratis hasta Premium con Notibot — todos con acceso completo a los módulos</p>
+    </div>
+    <div class="plans stagger">
+      <div class="plan">
+        <div class="pn">🎁 Prueba</div>
+        <div class="pd">El gancho: prueba TODO el potencial por un día.</div>
+        <div class="price"><span class="amt" style="font-size:34px">Gratis</span><span class="per">1 día</span></div>
+        <ul>
+          <li>Acceso completo (como Premium)</li>
+          <li>Incluye Notibot</li>
+          <li>Una sola vez por PC</li>
+        </ul>
+        <a class="pbtn" href="https://github.com/GetPoloBot/polobot-control/releases/latest/download/PoloBot_Setup.exe">Descargar y probar</a>
+      </div>
+      <div class="plan">
+        <div class="pn">▶️ Básica</div>
+        <div class="pd">El bot completo para empezar.</div>
+        <div class="old">antes $5 <span class="disc">−20%</span></div>
+        <div class="price"><span class="cur">$</span><span class="amt">4</span><span class="per">/ 7 días</span></div>
+        <ul>
+          <li>Todos los módulos (caza, pesca, vidente, colector…)</li>
+          <li>Actualizaciones automáticas</li>
+          <li>Atención normal</li>
+          <li class="no">Soporte prioritario</li>
+          <li class="no">Notibot</li>
+        </ul>
+        <a class="pbtn" href="https://t.me/PoloSoporte_Bot">Elegir plan</a>
+      </div>
+      <div class="plan">
+        <div class="pn">⭐ Prioritaria</div>
+        <div class="pd">Todo lo de Básica, con atención preferente.</div>
+        <div class="old">antes $8 <span class="disc">−20%</span></div>
+        <div class="price"><span class="cur">$</span><span class="amt">6.50</span><span class="per">/ 15 días</span></div>
+        <ul>
+          <li>Todos los módulos</li>
+          <li>Soporte prioritario ⭐ (subes en la lista)</li>
+          <li>Actualizaciones automáticas</li>
+          <li class="no">Notibot</li>
+        </ul>
+        <a class="pbtn" href="https://t.me/PoloSoporte_Bot">Elegir plan</a>
+      </div>
+      <div class="plan pop">
+        <div class="ribbon">★ Recomendado</div>
+        <div class="pn">👑 Premium</div>
+        <div class="pd">La experiencia completa, con Notibot y prioridad máxima.</div>
+        <div class="old">antes $17 <span class="disc">−40%</span></div>
+        <div class="price"><span class="cur">$</span><span class="amt">10</span><span class="per">/ 30 días</span></div>
+        <ul>
+          <li>Todos los módulos</li>
+          <li>Soporte prioritario 💎</li>
+          <li>Notibot: comandos remotos (/status, /iniciar, /pausar, /screenshot…)</li>
+          <li>Actualizaciones automáticas</li>
+        </ul>
+        <a class="pbtn" href="https://t.me/PoloSoporte_Bot">Elegir plan</a>
+      </div>
+    </div>
+    <div class="plans-note">💳 Pago por PayPal, Nequi o Binance · Activación inmediata tras la compra</div>
+  </section>
+
+  <!-- INSTALACIÓN -->
+  <section class="sec" id="instalar">
+    <div class="sec-head reveal"><div class="eyebrow">Empieza ya</div><h2>Instálalo en 3 pasos</h2><p>Listo para conquistar en menos de 2 minutos</p></div>
+    <div class="steps stagger">
+      <div class="step"><div class="num">I</div><h3>Descarga</h3><p>Toca “Descargar para Windows” y guarda el instalador.</p></div>
+      <div class="step"><div class="num">II</div><h3>Instala</h3><p>Ábrelo y sigue los pasos. Incluye todos los complementos.</p></div>
+      <div class="step"><div class="num">III</div><h3>¡Conquista!</h3><p>Activa tu licencia y deja que PoloBot trabaje por ti.</p></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" id="faq">
+    <div class="sec-head reveal"><div class="eyebrow">Dudas frecuentes</div><h2>Preguntas</h2></div>
+    <div class="faq stagger">
+      <details><summary>¿Cómo consigo una licencia?</summary><div class="a">Escríbenos por Telegram a @PoloSoporte_Bot, eliges tu plan, pagas y te activamos en minutos.</div></details>
+      <details><summary>¿Funciona en mi servidor?</summary><div class="a">PoloBot está pensado para Metin2. Escríbenos con los detalles de tu servidor y te confirmamos la compatibilidad.</div></details>
+      <details><summary>¿Qué es el Notibot?</summary><div class="a">Es la conexión con Telegram: recibes notificaciones y controlas la app (iniciar, pausar, detener, capturas, estado) desde el chat, estés donde estés.</div></details>
+      <details><summary>¿Cómo se actualiza?</summary><div class="a">La app te avisa cuando hay una versión nueva y se actualiza sola con un clic, conservando tu licencia y configuración.</div></details>
+      <details><summary>¿Puedo usar varias cuentas a la vez?</summary><div class="a">Sí. Módulos como vidente y barajas están pensados para manejar varias ventanas en paralelo.</div></details>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="sec">
+    <div class="finalcta reveal">
+      <h2>Listo para empezar</h2>
+      <p>Descarga PoloBot y deja que el grindeo trabaje por ti.</p>
+      <div class="row">
+        <a class="btn-gold" href="https://github.com/GetPoloBot/polobot-control/releases/latest/download/PoloBot_Setup.exe">⬇ Descargar para Windows</a>
+        <a class="btn-tg" href="https://t.me/PoloSoporte_Bot">💬 Hablar por Telegram</a>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /wrap -->
+
+  <footer>
+    <div class="fbrand">⚜ PoloBot ⚜</div>
+    Automatización para Metin2 · Soporte: <a href="https://t.me/PoloSoporte_Bot">@PoloSoporte_Bot</a>
+  </footer>
+
+  <!-- BURBUJA -->
+  <a class="chat-fab" href="https://t.me/PoloSoporte_Bot" target="_blank" rel="noopener" aria-label="Chatea por Telegram">
+    <span class="chat-label">💬 ¿Te ayudo? Chatea aquí</span>
+    <span class="chat-btn">
+      <svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+    </span>
+  </a>
+
+  <script>
+    // ── Aparición al hacer scroll (con cascada en .stagger) ──
+    const obs=new IntersectionObserver((es)=>{
+      es.forEach(e=>{
+        if(!e.isIntersecting) return;
+        const t=e.target;
+        if(t.classList.contains('stagger')){
+          [...t.children].forEach((c,i)=>{ c.style.transitionDelay=(i*85)+'ms'; });
+        }
+        t.classList.add('in'); obs.unobserve(t);
+      });
+    },{threshold:.12});
+    document.querySelectorAll('.reveal:not(.in),.stagger').forEach(el=>obs.observe(el));
+
+    // ── Maqueta dinámica: navega sola entre estados ──
+    const frames=[
+      { title:'· Hub', html:`
+        <div class="mock-label">MÓDULOS</div>
+        <div class="mock-grid">
+          <div class="mc"><div class="ic" style="color:#f59e0b">🎒</div><div class="nm">AUTOLOOT</div><div class="ds">Recoge fragmentos<br>y materiales</div><div class="bdg on">⬤ ON</div></div>
+          <div class="mc"><div class="ic" style="color:#ef4444">⚔️</div><div class="nm">AUTOCAZA</div><div class="ds">Combate<br>automático</div><div class="bdg on">⬤ ON</div></div>
+          <div class="mc"><div class="ic" style="color:#3b82f6">🎣</div><div class="nm">AUTOPESCA</div><div class="ds">Pesca<br>automática</div><div class="bdg on">⬤ ON</div></div>
+          <div class="mc dev"><div class="ic">👺</div><div class="nm">GOBLIN</div><div class="ds">Evento Goblin<br>de los tesoros</div><div class="bdg">⬤ DEV</div></div>
+          <div class="mc"><div class="ic" style="color:#06b6d4">⭐</div><div class="nm">EVENTOS</div><div class="ds">Botines de<br>eventos especiales</div><div class="bdg on">⬤ ON</div></div>
+          <div class="mc"><div class="ic" style="color:#10b981">🛡️</div><div class="nm">BLQ. EXP</div><div class="ds">Bloquea y dona<br>experiencia</div><div class="bdg on">⬤ ON</div></div>
+        </div>` },
+      { title:'· Autoloot', html:`
+        <div class="ovh"><span class="ovh-ic" style="color:#f59e0b">💰</span><span class="ovh-t">Autoloot</span></div>
+        <div class="perfil-row"><span class="perfil-label">Perfil</span><span class="perfil-chip gold">General ▾</span><span class="status-dot on" style="margin-left:auto">⬤</span><span class="status-txt">Recogiendo</span></div>
+        <div class="ring-wrap">
+          <svg class="ring-svg" viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="44"/><circle class="ring-fg" cx="50" cy="50" r="44" stroke-dasharray="196 276"/></svg>
+          <div class="ring-inner"><div class="ring-time">00:08</div><div class="ring-label">Próximo</div></div>
+        </div>
+        <div class="chips-row"><div class="chip"><div class="chip-val gold">12</div><div class="chip-lbl">Recogidos</div></div><div class="chip"><div class="chip-val">1</div><div class="chip-lbl">Ventanas</div></div></div>
+        <div class="ctrl-row"><span class="ctrl-btn accent">▶</span><span class="ctrl-btn gold">⚡</span><span class="ctrl-btn dim">↻</span><span class="ctrl-btn red">■</span></div>
+        <div class="mini-log"><div>[17:01] 1 ventana(s) detectada(s)</div><div>[17:02] Recogiendo: fragmento</div><div class="ok">[17:02] +1 dragón</div></div>` },
+      { title:'· Autocaza', html:`
+        <div class="ovh"><span class="ovh-ic" style="color:#ef4444">⚔</span><span class="ovh-t">Autocaza</span></div>
+        <div class="perfil-row"><span class="perfil-label">Perfil</span><span class="perfil-chip gold">General ▾</span><span class="status-dot on" style="margin-left:auto">⬤</span><span class="status-txt">Cazando</span></div>
+        <div class="stat-card"><div class="stat-card-top"><span class="stat-icon hp">✚</span><span class="stat-name">Vida</span><span class="stat-pct">82%</span></div><div class="stat-bar-wrap"><div class="stat-bar hp" style="width:82%"></div></div><div class="stat-card-bot"><span class="key-chip">Tecla: 1</span><div class="thr-row"><span class="thr-label">Usar al</span><span class="thr-btn">−</span><span class="thr-val">73</span><span class="thr-pct">%</span><span class="thr-btn">+</span></div></div></div>
+        <div class="stat-card"><div class="stat-card-top"><span class="stat-icon mp">❖</span><span class="stat-name">Maná</span><span class="stat-pct">64%</span></div><div class="stat-bar-wrap"><div class="stat-bar mp" style="width:64%"></div></div><div class="stat-card-bot"><span class="key-chip">Tecla: 9</span><div class="thr-row"><span class="thr-label">Usar al</span><span class="thr-btn">−</span><span class="thr-val">20</span><span class="thr-pct">%</span><span class="thr-btn">+</span></div></div></div>
+        <div class="death-row"><span class="death-dot" style="color:#22c55e">●</span><span class="death-lbl">Activo</span></div>
+        <div class="ctrl-row"><span class="ctrl-btn accent">▶</span><span class="ctrl-btn dim">■</span><span class="ctrl-btn gold">☀</span></div>
+        <div class="mini-log"><div>» Habilidad 2 lanzada</div><div>» Enemigo derrotado</div><div class="ok">» Recogiendo botín…</div></div>` },
+      { title:'· Logs', html:`
+        <div class="logs-toolbar"><span class="logs-lbl">Actividad reciente</span><span class="logs-clear">Limpiar</span></div>
+        <div class="uni-log">
+          <div><span class="tm">[10:24:07]</span> ⚔️ Autocaza: enemigo derrotado</div>
+          <div><span class="tm">[10:24:01]</span> 🎒 Autoloot: +3 materiales</div>
+          <div><span class="tm">[10:23:48]</span> 🔮 Vidente: ronda ganada (cta 2)</div>
+          <div><span class="tm">[10:22:55]</span> 🎣 Autopesca: captura #47</div>
+          <div><span class="tm">[10:21:30]</span> 🛡️ Bloqueo EXP activado</div>
+          <div><span class="tm">[10:20:12]</span> ▶ Sesión iniciada</div>
+        </div>` }
+    ];
+    // ── Recorrido guiado por la app (diseñado, sin capturas) ──
+    // frames: 0=Hub 1=Módulos 2=Autocaza 3=Logs
+    const screen=document.getElementById('demoScreen');
+    const tEl=document.getElementById('demoTitle');
+    const cursor=document.getElementById('fakeCursor');
+    const navItems=[...document.querySelectorAll('.mock-nav div')];
+    const dotsBox=document.getElementById('demoDots');
+    const wait=ms=>new Promise(r=>setTimeout(r,ms));
+    function moveCursor(x,y){ cursor.style.transform=`translate(${x}px,${y}px)`; }
+    function tap(){ cursor.classList.remove('tap'); void cursor.offsetWidth; cursor.classList.add('tap'); }
+    function setNav(n){ navItems.forEach((it,j)=>it.classList.toggle('act',j===n)); }
+    function show(i,dir){
+      screen.style.transition='none';
+      screen.style.transform = dir==='back' ? 'translateX(-26px)' : 'translateX(26px)';
+      screen.style.opacity=0;
+      screen.innerHTML=frames[i].html; tEl.textContent=frames[i].title;
+      void screen.offsetWidth;
+      screen.style.transition='transform .42s cubic-bezier(.3,.7,.2,1),opacity .34s ease';
+      screen.style.transform='translateX(0)'; screen.style.opacity=1;
+    }
+    // historia: Hub→Autocaza→Hub→Logs→Hub→Módulos→Hub (en bucle)
+    const seq=[
+      {i:1,dir:'fwd', c:[82,178], nav:0},   // clic en tarjeta AUTOLOOT (arriba-izq) → Autoloot
+      {i:0,dir:'back',c:[50,490], nav:0},   // clic en HUB → vuelve
+      {i:2,dir:'fwd', c:[218,178],nav:0},   // clic en tarjeta AUTOCAZA (arriba-der) → Autocaza
+      {i:0,dir:'back',c:[50,490], nav:0},   // clic en HUB → vuelve
+      {i:3,dir:'fwd', c:[250,490],nav:2},   // clic en LOGS (barra inferior)
+      {i:0,dir:'back',c:[50,490], nav:0},   // → Hub
+    ];
+    seq.forEach((_,k)=>{const d=document.createElement('i');if(k===0)d.className='on';dotsBox.appendChild(d)});
+    const dots=[...dotsBox.querySelectorAll('i')];
+    show(0,'fwd'); setNav(0); moveCursor(160,150);
+    async function tour(){
+      let k=0;
+      while(true){
+        await wait(1700);
+        const s=seq[k];
+        moveCursor(s.c[0],s.c[1]); await wait(640); tap(); await wait(230);
+        show(s.i,s.dir); setNav(s.nav);
+        dots.forEach((d,j)=>d.classList.toggle('on',j===k));
+        k=(k+1)%seq.length;
+      }
+    }
+    tour();
+
+    // ── Notibot: conversación animada en bucle ──
+    const chat=document.getElementById('tgChat');
+    const tgStatus=document.getElementById('tgStatus');
+    const script=[
+      { who:'in',  html:'🎣 <b>Autopesca</b>: 50 capturas alcanzadas ✅' },
+      { who:'out', html:'/status' },
+      { who:'in',  html:'⚔️ Autocaza <b>ON</b> · HP 82% · MP 64%<br>⏱️ Activo hace 1h 20m', think:1100 },
+      { who:'out', html:'/screenshot' },
+      { who:'in',  html:'📸 Captura enviada', think:1300 },
+      { who:'out', html:'/pausar pesca' },
+      { who:'in',  html:'⏸️ Autopesca en pausa. Escribe /reanudar para seguir.', think:1000 },
+    ];
+    const now=()=>{const d=new Date();return (''+d.getHours()).padStart(2,'0')+':'+(''+d.getMinutes()).padStart(2,'0');};
+    function addBub(who,html){
+      const b=document.createElement('div'); b.className='bub '+who;
+      b.innerHTML=html+'<div class="t">'+now()+'</div>'; chat.appendChild(b);
+    }
+    async function typing(ms){
+      const b=document.createElement('div'); b.className='bub in typing';
+      b.innerHTML='<i></i><i></i><i></i>'; chat.appendChild(b);
+      if(tgStatus) tgStatus.textContent='escribiendo…';
+      await wait(ms); b.remove(); if(tgStatus) tgStatus.textContent='en línea';
+    }
+    async function runChat(){
+      while(true){
+        chat.innerHTML='';
+        for(const m of script){
+          if(m.who==='in'){ await typing(m.think||900); }
+          else { await wait(700); }
+          addBub(m.who,m.html);
+          await wait(m.who==='in'?1100:600);
+        }
+        await wait(2600);
+      }
+    }
+    runChat();
+  </script>
+
+</body>
+</html>
