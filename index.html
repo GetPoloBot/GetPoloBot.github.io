@@ -111,10 +111,11 @@
   .nav-link:hover{color:var(--text);background:rgba(255,255,255,.05)}
   .nav-dl{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1208;font-weight:700;font-size:13.5px;padding:8px 16px;border-radius:9px;transition:.15s;box-shadow:0 4px 16px rgba(245,158,11,.28)}
   .nav-dl:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(245,158,11,.42)}
-  .lang-switch{display:inline-flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:2px;margin-left:2px}
-  .lang-flag{background:transparent;border:none;font-size:16px;line-height:1;padding:4px 7px;border-radius:7px;cursor:pointer;opacity:.4;filter:grayscale(.6);transition:.15s}
-  .lang-flag:hover{opacity:.85;filter:none}
-  .lang-flag.active{opacity:1;filter:none;background:rgba(245,158,11,.16)}
+  .lang-switch{display:inline-flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:3px;margin-left:2px}
+  .lang-flag{background:transparent;border:none;line-height:0;padding:3px 5px;border-radius:6px;cursor:pointer;opacity:.45;transition:.15s}
+  .lang-flag:hover{opacity:.9}
+  .lang-flag.active{opacity:1;background:rgba(245,158,11,.18)}
+  .lang-flag .flag{width:22px;height:14px;display:block;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
 
   /* HERO */
   .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:62px 0 36px}
@@ -505,8 +506,20 @@
       <a class="nav-link" href="#planes">Planes</a>
       <a class="nav-link" href="#faq">FAQ</a>
       <span class="lang-switch">
-        <button class="lang-flag" id="flagEs" onclick="setLang('es')" title="Español">🇪🇸</button>
-        <button class="lang-flag" id="flagEn" onclick="setLang('en')" title="English">🇬🇧</button>
+        <button class="lang-flag" id="flagEs" onclick="setLang('es')" title="Español" aria-label="Español">
+          <svg class="flag" viewBox="0 0 3 2"><rect width="3" height="2" fill="#c60b1e"/><rect y=".5" width="3" height="1" fill="#ffc400"/></svg>
+        </button>
+        <button class="lang-flag" id="flagEn" onclick="setLang('en')" title="English" aria-label="English">
+          <svg class="flag" viewBox="0 0 60 30">
+            <rect width="60" height="30" fill="#012169"/>
+            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="3"/>
+            <rect x="25" width="10" height="30" fill="#fff"/>
+            <rect y="10" width="60" height="10" fill="#fff"/>
+            <rect x="27" width="6" height="30" fill="#C8102E"/>
+            <rect y="12" width="60" height="6" fill="#C8102E"/>
+          </svg>
+        </button>
       </span>
       <a class="nav-dl" href="https://github.com/GetPoloBot/polobot-control/releases/latest/download/PoloBot_Setup.exe">⬇ Descargar</a>
     </div>
