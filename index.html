@@ -59,11 +59,13 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "¿Cómo consigo una licencia?", "acceptedAnswer": { "@type": "Answer", "text": "Escríbenos por Telegram a @PoloSoporte_Bot, eliges tu plan, pagas y te activamos en minutos." } },
+    { "@type": "Question", "name": "¿Me pueden banear usando PoloBot?", "acceptedAnswer": { "@type": "Answer", "text": "Ninguna herramienta de automatización es 100% libre de riesgo y usarla es bajo tu responsabilidad. PoloBot está diseñado para comportarse de forma natural (movimientos con curva humana y tiempos variables) para reducir ese riesgo. Ofrecemos prueba gratis para que lo evalúes en tu servidor." } },
+    { "@type": "Question", "name": "¿Es seguro? ¿Tiene virus?", "acceptedAnswer": { "@type": "Answer", "text": "No pedimos contraseñas del juego ni datos sensibles. La licencia se activa con un código único de tu PC. Al ser software independiente, Windows puede mostrar un aviso al instalar, lo cual es normal." } },
+    { "@type": "Question", "name": "¿Y si no me funciona?", "acceptedAnswer": { "@type": "Answer", "text": "Para eso está la prueba gratis de 1 día: lo compruebas en tu propio servidor sin pagar nada, y si tienes problemas te ayudamos por Telegram." } },
+    { "@type": "Question", "name": "¿Cómo y dónde pago?", "acceptedAnswer": { "@type": "Answer", "text": "Por PayPal, Nequi o Binance. Escríbenos a @PoloSoporte_Bot, eliges tu plan, pagas y te activamos en minutos." } },
     { "@type": "Question", "name": "¿Funciona en mi servidor?", "acceptedAnswer": { "@type": "Answer", "text": "PoloBot está pensado para Metin2. Escríbenos con los detalles de tu servidor y te confirmamos la compatibilidad." } },
-    { "@type": "Question", "name": "¿Qué es el Notibot?", "acceptedAnswer": { "@type": "Answer", "text": "Es la conexión con Telegram: recibes notificaciones y controlas la app (iniciar, pausar, detener, capturas, estado) desde el chat, estés donde estés." } },
-    { "@type": "Question", "name": "¿Cómo se actualiza?", "acceptedAnswer": { "@type": "Answer", "text": "La app te avisa cuando hay una versión nueva y se actualiza sola con un clic, conservando tu licencia y configuración." } },
-    { "@type": "Question", "name": "¿Puedo usar varias cuentas a la vez?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Módulos como vidente y barajas están pensados para manejar varias ventanas en paralelo." } }
+    { "@type": "Question", "name": "¿Puedo usar varias cuentas a la vez?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Según tu plan puedes manejar 2, 5 o ventanas ilimitadas en paralelo." } },
+    { "@type": "Question", "name": "¿Qué es el Notibot?", "acceptedAnswer": { "@type": "Answer", "text": "Es la conexión con Telegram: recibes notificaciones y controlas la app desde el chat. Disponible en Premium y 1 Año." } }
   ]
 }
 </script>
@@ -497,6 +499,7 @@
       <a class="nav-link" href="#notibot">Notibot</a>
       <a class="nav-link" href="#planes">Planes</a>
       <a class="nav-link" href="#faq">FAQ</a>
+      <button id="langBtn" onclick="toggleLang()" style="background:transparent;border:1px solid var(--border2);color:var(--dim);font:700 12.5px 'DM Sans',sans-serif;padding:6px 11px;border-radius:8px;cursor:pointer;margin-left:2px;transition:.15s" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='var(--dim)';this.style.borderColor='var(--border2)'">EN</button>
       <a class="nav-dl" href="https://github.com/GetPoloBot/polobot-control/releases/latest/download/PoloBot_Setup.exe">⬇ Descargar</a>
     </div>
   </nav>
@@ -673,6 +676,25 @@
 
   <div class="divider"><span>⚔ ◆ ⚔</span></div>
 
+  <!-- CONFIANZA / SEGURIDAD -->
+  <section class="sec" id="confianza">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Tranquilidad</div>
+      <h2>Compra con confianza</h2>
+      <p>Sabemos que confiar en una herramienta así da respeto. Por eso te lo ponemos fácil, claro y transparente.</p>
+    </div>
+    <div class="why stagger">
+      <div class="wcard"><div class="wi">🎁</div><h3>Pruébalo gratis</h3><p>1 día completo sin pagar nada. Compruébalo en tu propio servidor antes de decidir.</p></div>
+      <div class="wcard"><div class="wi">🧠</div><h3>Comportamiento natural</h3><p>Movimientos con curva humana y tiempos variables — sin patrones robóticos y perfectos.</p></div>
+      <div class="wcard"><div class="wi">🔒</div><h3>Tus datos, seguros</h3><p>No pedimos contraseñas del juego ni datos sensibles. Tu licencia se activa con un código único de tu PC.</p></div>
+      <div class="wcard"><div class="wi">💬</div><h3>Soporte humano</h3><p>Te atendemos por Telegram, persona a persona y rápido. Nada de respuestas frías.</p></div>
+      <div class="wcard"><div class="wi">⬆️</div><h3>Producto vivo</h3><p>Mejoras y arreglos constantes que llegan solos a tu app. No es un proyecto abandonado.</p></div>
+      <div class="wcard"><div class="wi">⚙️</div><h3>Tú tienes el control</h3><p>Inicia, pausa o detén cuando quieras, incluso desde tu celular. Tú decides cómo y cuándo.</p></div>
+    </div>
+  </section>
+
+  <div class="divider"><span>⚔ ◆ ⚔</span></div>
+
   <!-- PLANES -->
   <section class="sec" id="planes">
     <div class="sec-head reveal">
@@ -764,11 +786,16 @@
   <section class="sec" id="faq">
     <div class="sec-head reveal"><div class="eyebrow">Dudas frecuentes</div><h2>Preguntas</h2></div>
     <div class="faq stagger">
+      <details><summary>¿Me pueden banear?</summary><div class="a">Seamos honestos: ninguna herramienta de automatización es 100% libre de riesgo, y usarla es bajo tu responsabilidad. PoloBot está diseñado para comportarse de forma natural (movimientos con curva humana y tiempos variables) para reducir ese riesgo al máximo. Te recomendamos un uso prudente — y por eso ofrecemos la prueba gratis: pruébalo en tu servidor antes de comprometerte.</div></details>
+      <details><summary>¿Es seguro? ¿Tiene virus?</summary><div class="a">No pedimos contraseñas del juego ni datos sensibles. La licencia se activa con un código único de tu PC. Como cualquier app que no está firmada por una gran empresa, Windows puede mostrar un aviso al instalar — es normal en software independiente. Si tienes dudas, escríbenos antes de instalar.</div></details>
+      <details><summary>¿Y si no me funciona?</summary><div class="a">Para eso está la <strong>prueba gratis de 1 día</strong>: lo compruebas en tu propio servidor sin pagar nada. Y si tienes cualquier problema, te ayudamos por Telegram de persona a persona.</div></details>
+      <details><summary>¿Cómo y dónde pago?</summary><div class="a">Por PayPal, Nequi o Binance. Escríbenos a @PoloSoporte_Bot, eliges tu plan, pagas y te activamos en minutos.</div></details>
+      <details><summary>¿Funciona en mi servidor?</summary><div class="a">PoloBot está pensado para Metin2. Escríbenos con los detalles de tu servidor y te confirmamos la compatibilidad. La calibración visual permite adaptarlo a distintas interfaces.</div></details>
+      <details><summary>¿Qué necesito para usarlo?</summary><div class="a">Windows 10 u 11 y el juego abierto. El instalador incluye todos los complementos — no tienes que configurar nada técnico.</div></details>
+      <details><summary>¿Puedo usar varias cuentas a la vez?</summary><div class="a">Sí. Según tu plan puedes manejar 2, 5 o ventanas ilimitadas en paralelo. Módulos como vidente y barajas están pensados para multi-cuenta.</div></details>
+      <details><summary>¿Qué es el Notibot?</summary><div class="a">Es la conexión con Telegram: recibes notificaciones y controlas la app (iniciar, pausar, detener, capturas, estado) desde el chat, estés donde estés. Disponible en los planes Premium y 1 Año.</div></details>
+      <details><summary>¿Cómo se actualiza?</summary><div class="a">La app te avisa cuando hay una versión nueva y se actualiza sola con un clic, conservando tu licencia y toda tu configuración.</div></details>
       <details><summary>¿Cómo consigo una licencia?</summary><div class="a">Escríbenos por Telegram a @PoloSoporte_Bot, eliges tu plan, pagas y te activamos en minutos.</div></details>
-      <details><summary>¿Funciona en mi servidor?</summary><div class="a">PoloBot está pensado para Metin2. Escríbenos con los detalles de tu servidor y te confirmamos la compatibilidad.</div></details>
-      <details><summary>¿Qué es el Notibot?</summary><div class="a">Es la conexión con Telegram: recibes notificaciones y controlas la app (iniciar, pausar, detener, capturas, estado) desde el chat, estés donde estés.</div></details>
-      <details><summary>¿Cómo se actualiza?</summary><div class="a">La app te avisa cuando hay una versión nueva y se actualiza sola con un clic, conservando tu licencia y configuración.</div></details>
-      <details><summary>¿Puedo usar varias cuentas a la vez?</summary><div class="a">Sí. Módulos como vidente y barajas están pensados para manejar varias ventanas en paralelo.</div></details>
     </div>
   </section>
 
@@ -935,6 +962,198 @@
       }
     }
     runChat();
+  </script>
+
+  <!-- ── i18n ES/EN ── -->
+  <script>
+  (function(){
+    const I18N = {
+      // Nav
+      "Qué es":"About", "Módulos":"Modules", "Planes":"Plans", "⬇ Descargar":"⬇ Download",
+      // Hero
+      "Domina el juego en":"Master the game on", "piloto automático":"autopilot",
+      "PoloBot es el arsenal todo-en-uno que caza, pesca, recolecta y farmea por ti — en una o varias cuentas a la vez, y lo controlas hasta desde tu celular.":"PoloBot is the all-in-one arsenal that hunts, fishes, gathers and farms for you — on one or several accounts at once, and you even control it from your phone.",
+      "⬇ Descargar para Windows":"⬇ Download for Windows", "Ver planes":"See plans",
+      "Multi-cuenta":"Multi-account", "Control por Telegram":"Telegram control",
+      // Stats
+      "Sin parar":"Non-stop", "Control remoto":"Remote control",
+      // ¿Qué es?
+      "¿Qué es":"What is",
+      "PoloBot es una aplicación de escritorio para":"PoloBot is a desktop app for",
+      "que automatiza las tareas más repetitivas del juego: cazar, pescar, recolectar, jugar la vidente y más. Lo configuras una vez y trabaja por ti — solo, sin que tengas que estar pendiente.":"that automates the game's most repetitive tasks: hunting, fishing, gathering, playing the fortune teller and more. Set it up once and it works for you — on its own, without you having to watch it.",
+      "Está pensado para jugadores que quieren":"It's made for players who want to",
+      "farmear más sin pasar horas frente a la pantalla":"farm more without spending hours in front of the screen",
+      ": deja varias cuentas trabajando a la vez y revisa el progreso cuando quieras, incluso desde tu celular por Telegram.":": leave several accounts working at once and check progress whenever you want, even from your phone via Telegram.",
+      "Una sola app con todos los módulos — no necesitas mil programas sueltos.":"One single app with all modules — no need for a thousand separate programs.",
+      "Calibración visual sencilla: le muestras dónde está cada cosa y listo.":"Simple visual calibration: you show it where everything is and that's it.",
+      "Teclas de inicio, pausa y parada que funcionan en cualquier módulo.":"Start, pause and stop keys that work in any module.",
+      "Se actualiza solo y conserva tu licencia y configuración.":"Updates itself and keeps your license and settings.",
+      "Para Metin2":"For Metin2", "Servidores privados y oficiales*":"Private and official servers*",
+      "Instalador con todo incluido":"Installer with everything included",
+      "Varias ventanas en paralelo":"Several windows in parallel",
+      "Lo controlas desde Telegram":"Control it from Telegram",
+      "Licencia segura":"Secure license", "Activación por código de PC":"Activation by PC code",
+      // Notibot
+      "El plus":"The plus", "Notibot — tu bot en el bolsillo":"Notibot — your bot in your pocket",
+      "Controla y vigila PoloBot desde Telegram, estés donde estés":"Control and monitor PoloBot from Telegram, wherever you are",
+      "Conecta PoloBot con tu Telegram y tendrás el control total a distancia: recibe avisos en tiempo real y maneja cada módulo con un mensaje.":"Connect PoloBot with your Telegram and get full remote control: receive real-time alerts and manage every module with a message.",
+      "Notificaciones en vivo":"Live notifications",
+      "Capturas, eventos, alertas y cuando algo necesita tu atención.":"Screenshots, events, alerts and when something needs your attention.",
+      "Comandos a distancia":"Remote commands",
+      "Inicia, pausa o detén cualquier módulo desde el chat.":"Start, pause or stop any module from the chat.",
+      "Captura de pantalla":"Screenshot",
+      "Pide una foto de la app cuando quieras revisar el progreso.":"Ask for a photo of the app whenever you want to check progress.",
+      "Estado completo":"Full status",
+      "Consulta qué está corriendo, HP/MP, tiempos y más.":"Check what's running, HP/MP, timers and more.",
+      // Spotlights
+      "Lo que lo hace distinto":"What makes it different", "Poder real, sin esfuerzo":"Real power, no effort",
+      "No es solo \"un bot\" — es un sistema completo pensado para Metin2":"It's not just \"a bot\" — it's a complete system built for Metin2",
+      "Combate que piensa por ti":"Combat that thinks for you",
+      "Lanza tus habilidades en orden, se cura, revive y vuelve a la pelea. Tú solo eliges el perfil.":"Casts your skills in order, heals, revives and returns to the fight. You just pick the profile.",
+      "Rotación de habilidades configurable":"Configurable skill rotation",
+      "Curación automática por HP/MP":"Automatic HP/MP healing",
+      "Resurrección y regreso a la zona":"Resurrection and return to the zone",
+      "Vidente & Barajas":"Fortune Teller & Card Decks", "Multi-cuenta sin estar pendiente":"Multi-account, hands-off",
+      "Juega la vidente en varias cuentas a la vez y reclama las barajas solo, con lectura por pantalla.":"Plays the fortune teller on several accounts at once and claims the card decks on its own, reading the screen.",
+      "Estrategia optimizada":"Optimized strategy", "Reclamo automático de recompensas":"Automatic reward claiming",
+      "Siempre al día":"Always up to date", "Se actualiza solo":"Updates itself",
+      "Cuando sale una versión nueva, PoloBot la descarga e instala con un clic — sin reinstalar nada a mano.":"When a new version comes out, PoloBot downloads and installs it with one click — no manual reinstalling.",
+      "Aviso dentro de la app":"In-app notice", "Descarga e instalación automática":"Automatic download and install",
+      "Conserva tu licencia y ajustes":"Keeps your license and settings",
+      // Módulos
+      "Autocaza":"Auto-hunt",
+      "Combate automático con habilidades, curación y resurrección. El corazón del farmeo.":"Automatic combat with skills, healing and resurrection. The heart of farming.",
+      "Activo":"Active", "Recoge fragmentos y materiales del suelo.":"Picks up shards and materials from the ground.",
+      "Autopesca":"Auto-fishing", "Pesca sola y detecta el tirón.":"Fishes on its own and detects the bite.",
+      "Rompecabezas":"Puzzle", "Resuelve el minijuego de pesca de forma óptima.":"Solves the fishing minigame optimally.",
+      "Vidente":"Fortune Teller", "Automático y multi-cuenta.":"Automatic and multi-account.",
+      "Barajas":"Card Decks", "Reclama las barajas de la vidente.":"Claims the fortune teller's card decks.",
+      "Bloqueo EXP & Eventos":"EXP Lock & Events",
+      "Bloquea y dona experiencia a tu gusto, y automatiza los botines de eventos especiales.":"Lock and donate experience as you like, and automate special event loot.",
+      // Por qué
+      "Confianza":"Trust", "¿Por qué PoloBot?":"Why PoloBot?", "Todo en uno":"All in one",
+      "Caza, pesca, vidente, recolección y más en una sola app.":"Hunting, fishing, fortune teller, gathering and more in a single app.",
+      "Maneja varias ventanas a la vez sin que se estorben.":"Run several windows at once without them clashing.",
+      "Siempre actualizado":"Always updated",
+      "Recibe mejoras y arreglos automáticamente, con un clic.":"Get improvements and fixes automatically, with one click.",
+      "Soporte directo":"Direct support", "Te ayudamos por Telegram, rápido y de persona a persona.":"We help you on Telegram, fast and person to person.",
+      // Confianza
+      "Tranquilidad":"Peace of mind", "Compra con confianza":"Buy with confidence",
+      "Sabemos que confiar en una herramienta así da respeto. Por eso te lo ponemos fácil, claro y transparente.":"We know trusting a tool like this is a big deal. That's why we make it easy, clear and transparent.",
+      "Pruébalo gratis":"Try it free",
+      "1 día completo sin pagar nada. Compruébalo en tu propio servidor antes de decidir.":"A full day without paying anything. Test it on your own server before deciding.",
+      "Comportamiento natural":"Natural behavior",
+      "Movimientos con curva humana y tiempos variables — sin patrones robóticos y perfectos.":"Human-like curved movements and variable timing — no perfect robotic patterns.",
+      "Tus datos, seguros":"Your data, safe",
+      "No pedimos contraseñas del juego ni datos sensibles. Tu licencia se activa con un código único de tu PC.":"We don't ask for game passwords or sensitive data. Your license activates with a unique code from your PC.",
+      "Soporte humano":"Human support",
+      "Te atendemos por Telegram, persona a persona y rápido. Nada de respuestas frías.":"We help you on Telegram, person to person and fast. No cold replies.",
+      "Producto vivo":"Living product",
+      "Mejoras y arreglos constantes que llegan solos a tu app. No es un proyecto abandonado.":"Constant improvements and fixes that reach your app on their own. Not an abandoned project.",
+      "Tú tienes el control":"You're in control",
+      "Inicia, pausa o detén cuando quieras, incluso desde tu celular. Tú decides cómo y cuándo.":"Start, pause or stop whenever you want, even from your phone. You decide how and when.",
+      // Planes
+      "Licencias":"Licenses", "Planes & ofertas":"Plans & offers",
+      "Desde la prueba gratis hasta el plan anual — elige el que mejor se ajuste a ti":"From the free trial to the yearly plan — pick the one that fits you best",
+      "🎁 Prueba":"🎁 Trial", "Prueba TODO el potencial por un día.":"Try the FULL potential for a day.",
+      "Gratis":"Free", "1 día":"1 day", "Acceso completo (igual que Premium)":"Full access (same as Premium)",
+      "Una sola vez por PC":"Once per PC", "Descargar y probar":"Download & try",
+      "▶️ Básica":"▶️ Basic", "El bot completo para empezar.":"The full bot to get started.",
+      "/ 7 días":"/ 7 days", "Bot completo (colector, autocaza, vidente, barajas, pesca)":"Full bot (looter, auto-hunt, fortune teller, decks, fishing)",
+      "Hasta 2 ventanas simultáneas":"Up to 2 simultaneous windows",
+      "Hasta 2 perfiles (colector y autocaza)":"Up to 2 profiles (looter and auto-hunt)",
+      "Soporte prioritario":"Priority support", "Elegir plan":"Choose plan",
+      "⭐ Prioritaria":"⭐ Priority", "Más ventanas y atención preferente.":"More windows and preferential attention.",
+      "antes $12":"was $12", "/ 15 días":"/ 15 days", "Todo lo de la Básica":"Everything in Basic",
+      "Hasta 5 ventanas simultáneas":"Up to 5 simultaneous windows", "Hasta 5 perfiles":"Up to 5 profiles",
+      "Soporte prioritario ⭐":"Priority support ⭐", "★ Recomendado":"★ Recommended",
+      "La experiencia completa, con Notibot.":"The complete experience, with Notibot.",
+      "antes $25":"was $25", "/ 30 días":"/ 30 days", "Todo lo anterior":"Everything above",
+      "Ventanas ilimitadas":"Unlimited windows", "Perfiles ilimitados":"Unlimited profiles",
+      "Soporte prioritario 💎":"Priority support 💎", "Notibot (notificaciones por Telegram)":"Notibot (Telegram notifications)",
+      "💎 1 Año":"💎 1 Year", "El plan más económico por día.":"The cheapest plan per day.",
+      "antes $150":"was $150", "/ 365 días":"/ 365 days", "Todo Premium incluido":"Everything in Premium included",
+      "Ventanas y perfiles ilimitados":"Unlimited windows and profiles",
+      "💳 Pago por PayPal, Nequi o Binance · Activación inmediata tras la compra":"💳 Pay with PayPal, Nequi or Binance · Instant activation after purchase",
+      // Instalación
+      "Empieza ya":"Get started", "Instálalo en 3 pasos":"Install it in 3 steps",
+      "Listo para conquistar en menos de 2 minutos":"Ready to conquer in under 2 minutes",
+      "Descarga":"Download", "Toca “Descargar para Windows” y guarda el instalador.":"Tap “Download for Windows” and save the installer.",
+      "Instala":"Install", "Ábrelo y sigue los pasos. Incluye todos los complementos.":"Open it and follow the steps. It includes all add-ons.",
+      "¡Conquista!":"Conquer!", "Activa tu licencia y deja que PoloBot trabaje por ti.":"Activate your license and let PoloBot work for you.",
+      // FAQ
+      "Dudas frecuentes":"FAQ", "Preguntas":"Questions",
+      "¿Me pueden banear?":"Can I get banned?",
+      "Seamos honestos: ninguna herramienta de automatización es 100% libre de riesgo, y usarla es bajo tu responsabilidad. PoloBot está diseñado para comportarse de forma natural (movimientos con curva humana y tiempos variables) para reducir ese riesgo al máximo. Te recomendamos un uso prudente — y por eso ofrecemos la prueba gratis: pruébalo en tu servidor antes de comprometerte.":"Let's be honest: no automation tool is 100% risk-free, and using it is your responsibility. PoloBot is designed to behave naturally (human-like curved movements and variable timing) to minimize that risk. We recommend prudent use — and that's why we offer the free trial: test it on your server before committing.",
+      "¿Es seguro? ¿Tiene virus?":"Is it safe? Does it have viruses?",
+      "No pedimos contraseñas del juego ni datos sensibles. La licencia se activa con un código único de tu PC. Como cualquier app que no está firmada por una gran empresa, Windows puede mostrar un aviso al instalar — es normal en software independiente. Si tienes dudas, escríbenos antes de instalar.":"We don't ask for game passwords or sensitive data. The license activates with a unique code from your PC. Like any app not signed by a big company, Windows may show a warning when installing — that's normal for independent software. If in doubt, message us before installing.",
+      "¿Y si no me funciona?":"What if it doesn't work for me?",
+      "Para eso está la":"That's what the", "prueba gratis de 1 día":"free 1-day trial",
+      ": lo compruebas en tu propio servidor sin pagar nada. Y si tienes cualquier problema, te ayudamos por Telegram de persona a persona.":" is for: test it on your own server without paying anything. And if you have any problem, we help you on Telegram person to person.",
+      "¿Cómo y dónde pago?":"How and where do I pay?",
+      "Por PayPal, Nequi o Binance. Escríbenos a @PoloSoporte_Bot, eliges tu plan, pagas y te activamos en minutos.":"With PayPal, Nequi or Binance. Message us at @PoloSoporte_Bot, pick your plan, pay and we activate you in minutes.",
+      "¿Funciona en mi servidor?":"Does it work on my server?",
+      "PoloBot está pensado para Metin2. Escríbenos con los detalles de tu servidor y te confirmamos la compatibilidad. La calibración visual permite adaptarlo a distintas interfaces.":"PoloBot is built for Metin2. Message us with your server details and we'll confirm compatibility. Visual calibration lets you adapt it to different interfaces.",
+      "¿Qué necesito para usarlo?":"What do I need to use it?",
+      "Windows 10 u 11 y el juego abierto. El instalador incluye todos los complementos — no tienes que configurar nada técnico.":"Windows 10 or 11 and the game open. The installer includes all add-ons — you don't have to set up anything technical.",
+      "¿Puedo usar varias cuentas a la vez?":"Can I use several accounts at once?",
+      "Sí. Según tu plan puedes manejar 2, 5 o ventanas ilimitadas en paralelo. Módulos como vidente y barajas están pensados para multi-cuenta.":"Yes. Depending on your plan you can run 2, 5 or unlimited windows in parallel. Modules like fortune teller and decks are built for multi-account.",
+      "¿Qué es el Notibot?":"What is the Notibot?",
+      "Es la conexión con Telegram: recibes notificaciones y controlas la app (iniciar, pausar, detener, capturas, estado) desde el chat, estés donde estés. Disponible en los planes Premium y 1 Año.":"It's the Telegram connection: you receive notifications and control the app (start, pause, stop, screenshots, status) from the chat, wherever you are. Available in the Premium and 1 Year plans.",
+      "¿Cómo se actualiza?":"How does it update?",
+      "La app te avisa cuando hay una versión nueva y se actualiza sola con un clic, conservando tu licencia y toda tu configuración.":"The app notifies you when there's a new version and updates itself with one click, keeping your license and all your settings.",
+      "¿Cómo consigo una licencia?":"How do I get a license?",
+      "Escríbenos por Telegram a @PoloSoporte_Bot, eliges tu plan, pagas y te activamos en minutos.":"Message us on Telegram at @PoloSoporte_Bot, pick your plan, pay and we activate you in minutes.",
+      // CTA / footer / bubble
+      "Listo para empezar":"Ready to start", "Descarga PoloBot y deja que el grindeo trabaje por ti.":"Download PoloBot and let the grind work for you.",
+      "💬 Hablar por Telegram":"💬 Talk on Telegram",
+      "Automatización para Metin2 · Soporte:":"Automation for Metin2 · Support:",
+      "💬 ¿Te ayudo? Chatea aquí":"💬 Need help? Chat here"
+    };
+    function _skip(node){
+      let p = node.parentNode;
+      while (p && p !== document.body){
+        if (p.id === 'demoScreen' || p.id === 'tgChat') return true;
+        if (p.tagName === 'SCRIPT' || p.tagName === 'STYLE') return true;
+        p = p.parentNode;
+      }
+      return false;
+    }
+    function _walk(fn){
+      const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+      const arr = [];
+      while (w.nextNode()) { if (!_skip(w.currentNode)) arr.push(w.currentNode); }
+      arr.forEach(fn);
+    }
+    function setLang(lang){
+      const toEn = (lang === 'en');
+      _walk(n => {
+        const base = (n._es != null) ? n._es : n.textContent;
+        const key = base.trim();
+        if (!key) return;
+        if (toEn) {
+          if (I18N[key] != null) {
+            if (n._es == null) n._es = n.textContent;
+            n.textContent = n.textContent.replace(key, I18N[key]);
+          }
+        } else if (n._es != null) {
+          n.textContent = n._es;
+        }
+      });
+      document.documentElement.lang = lang;
+      localStorage.setItem('pb_lang', lang);
+      const b = document.getElementById('langBtn');
+      if (b) b.textContent = (lang === 'es') ? 'EN' : 'ES';
+    }
+    window.toggleLang = function(){
+      const cur = localStorage.getItem('pb_lang') || 'es';
+      setLang(cur === 'es' ? 'en' : 'es');
+    };
+    let lang = localStorage.getItem('pb_lang');
+    if (!lang) lang = (navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en';
+    if (lang === 'en') setLang('en');
+    else { const b = document.getElementById('langBtn'); if (b) b.textContent = 'EN'; }
+  })();
   </script>
 
 </body>
