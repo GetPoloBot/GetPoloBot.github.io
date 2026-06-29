@@ -47,9 +47,10 @@
   "inLanguage": "es",
   "offers": [
     { "@type": "Offer", "name": "Prueba", "price": "0", "priceCurrency": "USD", "description": "1 día gratis con acceso completo" },
-    { "@type": "Offer", "name": "Básica", "price": "4", "priceCurrency": "USD", "description": "7 días, todos los módulos" },
-    { "@type": "Offer", "name": "Prioritaria", "price": "6.50", "priceCurrency": "USD", "description": "15 días, soporte prioritario" },
-    { "@type": "Offer", "name": "Premium", "price": "10", "priceCurrency": "USD", "description": "30 días con Notibot y control remoto" }
+    { "@type": "Offer", "name": "Básica", "price": "5", "priceCurrency": "USD", "description": "7 días, hasta 2 ventanas y 2 perfiles" },
+    { "@type": "Offer", "name": "Prioritaria", "price": "10", "priceCurrency": "USD", "description": "15 días, hasta 5 ventanas, soporte prioritario" },
+    { "@type": "Offer", "name": "Premium", "price": "20", "priceCurrency": "USD", "description": "30 días, ventanas/perfiles ilimitados, Notibot" },
+    { "@type": "Offer", "name": "1 Año", "price": "100", "priceCurrency": "USD", "description": "365 días, todo Premium incluido" }
   ]
 }
 </script>
@@ -672,16 +673,15 @@
     <div class="sec-head reveal">
       <div class="eyebrow">Licencias</div>
       <h2>Planes &amp; ofertas</h2>
-      <p>Desde la prueba gratis hasta Premium con Notibot — todos con acceso completo a los módulos</p>
+      <p>Desde la prueba gratis hasta el plan anual — elige el que mejor se ajuste a ti</p>
     </div>
     <div class="plans stagger">
       <div class="plan">
         <div class="pn">🎁 Prueba</div>
-        <div class="pd">El gancho: prueba TODO el potencial por un día.</div>
+        <div class="pd">Prueba TODO el potencial por un día.</div>
         <div class="price"><span class="amt" style="font-size:34px">Gratis</span><span class="per">1 día</span></div>
         <ul>
-          <li>Acceso completo (como Premium)</li>
-          <li>Incluye Notibot</li>
+          <li>Acceso completo (igual que Premium)</li>
           <li>Una sola vez por PC</li>
         </ul>
         <a class="pbtn" href="https://github.com/GetPoloBot/polobot-control/releases/latest/download/PoloBot_Setup.exe">Descargar y probar</a>
@@ -689,12 +689,11 @@
       <div class="plan">
         <div class="pn">▶️ Básica</div>
         <div class="pd">El bot completo para empezar.</div>
-        <div class="old">antes $5 <span class="disc">−20%</span></div>
-        <div class="price"><span class="cur">$</span><span class="amt">4</span><span class="per">/ 7 días</span></div>
+        <div class="price"><span class="cur">$</span><span class="amt">5</span><span class="per">/ 7 días</span></div>
         <ul>
-          <li>Todos los módulos (caza, pesca, vidente, colector…)</li>
-          <li>Actualizaciones automáticas</li>
-          <li>Atención normal</li>
+          <li>Bot completo (colector, autocaza, vidente, barajas, pesca)</li>
+          <li>Hasta 2 ventanas simultáneas</li>
+          <li>Hasta 2 perfiles (colector y autocaza)</li>
           <li class="no">Soporte prioritario</li>
           <li class="no">Notibot</li>
         </ul>
@@ -702,13 +701,14 @@
       </div>
       <div class="plan">
         <div class="pn">⭐ Prioritaria</div>
-        <div class="pd">Todo lo de Básica, con atención preferente.</div>
-        <div class="old">antes $8 <span class="disc">−20%</span></div>
-        <div class="price"><span class="cur">$</span><span class="amt">6.50</span><span class="per">/ 15 días</span></div>
+        <div class="pd">Más ventanas y atención preferente.</div>
+        <div class="old">antes $12 <span class="disc">−17%</span></div>
+        <div class="price"><span class="cur">$</span><span class="amt">10</span><span class="per">/ 15 días</span></div>
         <ul>
-          <li>Todos los módulos</li>
-          <li>Soporte prioritario ⭐ (subes en la lista)</li>
-          <li>Actualizaciones automáticas</li>
+          <li>Todo lo de la Básica</li>
+          <li>Hasta 5 ventanas simultáneas</li>
+          <li>Hasta 5 perfiles</li>
+          <li>Soporte prioritario ⭐</li>
           <li class="no">Notibot</li>
         </ul>
         <a class="pbtn" href="https://t.me/PoloSoporte_Bot">Elegir plan</a>
@@ -716,14 +716,28 @@
       <div class="plan pop">
         <div class="ribbon">★ Recomendado</div>
         <div class="pn">👑 Premium</div>
-        <div class="pd">La experiencia completa, con Notibot y prioridad máxima.</div>
-        <div class="old">antes $17 <span class="disc">−40%</span></div>
-        <div class="price"><span class="cur">$</span><span class="amt">10</span><span class="per">/ 30 días</span></div>
+        <div class="pd">La experiencia completa, con Notibot.</div>
+        <div class="old">antes $25 <span class="disc">−20%</span></div>
+        <div class="price"><span class="cur">$</span><span class="amt">20</span><span class="per">/ 30 días</span></div>
         <ul>
-          <li>Todos los módulos</li>
+          <li>Todo lo anterior</li>
+          <li>Ventanas ilimitadas</li>
+          <li>Perfiles ilimitados</li>
           <li>Soporte prioritario 💎</li>
-          <li>Notibot: comandos remotos (/status, /iniciar, /pausar, /screenshot…)</li>
-          <li>Actualizaciones automáticas</li>
+          <li>Notibot (notificaciones por Telegram)</li>
+        </ul>
+        <a class="pbtn" href="https://t.me/PoloSoporte_Bot">Elegir plan</a>
+      </div>
+      <div class="plan">
+        <div class="pn">💎 1 Año</div>
+        <div class="pd">El plan más económico por día.</div>
+        <div class="old">antes $150 <span class="disc">−33%</span></div>
+        <div class="price"><span class="cur">$</span><span class="amt">100</span><span class="per">/ 365 días</span></div>
+        <ul>
+          <li>Todo Premium incluido</li>
+          <li>Ventanas y perfiles ilimitados</li>
+          <li>Soporte prioritario 💎</li>
+          <li>Notibot</li>
         </ul>
         <a class="pbtn" href="https://t.me/PoloSoporte_Bot">Elegir plan</a>
       </div>
