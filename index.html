@@ -398,8 +398,11 @@
 
   /* POR QUÉ */
   .why{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:16px}
-  .wcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px}
-  .wcard .wi{font-size:28px;margin-bottom:11px}
+  .wcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;position:relative;overflow:hidden;transition:transform .16s,border-color .16s,box-shadow .16s}
+  .wcard::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:linear-gradient(90deg,var(--gold-deep),var(--gold));opacity:0;transition:opacity .2s}
+  .wcard:hover{transform:translateY(-4px);border-color:var(--border2);box-shadow:0 14px 36px rgba(0,0,0,.45)}
+  .wcard:hover::before{opacity:.7}
+  .wcard .wi{font-size:28px;margin-bottom:11px;display:block}
   .wcard h3{font-size:16.5px;margin-bottom:6px}
   .wcard p{color:var(--dim);font-size:13.5px}
 
@@ -684,14 +687,26 @@
 
   <div class="divider"><span>⚔ ◆ ⚔</span></div>
 
-  <!-- POR QUÉ -->
+  <!-- POR QUÉ / LO QUE NOS DIFERENCIA -->
   <section class="sec" id="porque">
-    <div class="sec-head reveal"><div class="eyebrow">Confianza</div><h2>¿Por qué PoloBot?</h2></div>
+    <div class="sec-head reveal">
+      <div class="eyebrow">Lo que nos diferencia</div>
+      <h2>¿Por qué PoloBot?</h2>
+      <p>Ocho razones por las que jugadores de Metin2 eligen automatizar con PoloBot.</p>
+    </div>
     <div class="why stagger">
-      <div class="wcard"><div class="wi">🧩</div><h3>Todo en uno</h3><p>Caza, pesca, vidente, recolección y más en una sola app.</p></div>
-      <div class="wcard"><div class="wi">👥</div><h3>Multi-cuenta</h3><p>Maneja varias ventanas a la vez sin que se estorben.</p></div>
-      <div class="wcard"><div class="wi">⬆️</div><h3>Siempre actualizado</h3><p>Recibe mejoras y arreglos automáticamente, con un clic.</p></div>
-      <div class="wcard"><div class="wi">💬</div><h3>Soporte directo</h3><p>Te ayudamos por Telegram, rápido y de persona a persona.</p></div>
+      <div class="wcard"><span class="wi">🎮</span><h3>Cualquier servidor</h3><p>Funciona en servidores oficiales y privados, sin depender de versiones ni parches del cliente.</p></div>
+      <div class="wcard"><span class="wi">🛡️</span><h3>No modifica el juego</h3><p>Trabaja por fuera — no inyecta nada en el cliente ni altera archivos. Discreto y estable.</p></div>
+      <div class="wcard"><span class="wi">⚡</span><h3>Listo en 1 minuto</h3><p>Sin mods, sin compilar, sin configurar archivos. Descargas, abres y funciona.</p></div>
+      <div class="wcard"><span class="wi">🪟</span><h3>Multicuenta</h3><p>Controla varias ventanas del juego a la vez, cada una con su propia configuración.</p></div>
+      <div class="wcard"><span class="wi">🤖</span><h3>Todo en uno</h3><p>Autocaza, pesca, vidente, barajas, recolector y más en una sola app, sin programas sueltos.</p></div>
+      <div class="wcard"><span class="wi">💬</span><h3>Soporte real en español</h3><p>Atención directa por Telegram. Respuestas de persona a persona, no de bots ni formularios.</p></div>
+      <div class="wcard"><span class="wi">🔄</span><h3>Siempre actualizado</h3><p>Avisos automáticos de nuevas versiones. Un clic y listo — sin reinstalar, sin perder tu configuración.</p></div>
+      <div class="wcard"><span class="wi">🎁</span><h3>Prueba gratis</h3><p>1 día completo con acceso a todo antes de pagar. Sin compromiso, en tu propio servidor.</p></div>
+    </div>
+    <div class="reveal" style="text-align:center;margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a class="btn-gold" href="#planes">Ver planes y precios</a>
+      <a class="btn-ghost" href="https://t.me/PoloSoporte_Bot">💬 Escríbenos</a>
     </div>
   </section>
 
@@ -1051,13 +1066,30 @@
       "Barajas":"Card Decks", "Reclama las barajas de la vidente.":"Claims the fortune teller's card decks.",
       "Bloqueo EXP & Eventos":"EXP Lock & Events",
       "Bloquea y dona experiencia a tu gusto, y automatiza los botines de eventos especiales.":"Lock and donate experience as you like, and automate special event loot.",
-      // Por qué
-      "Confianza":"Trust", "¿Por qué PoloBot?":"Why PoloBot?", "Todo en uno":"All in one",
-      "Caza, pesca, vidente, recolección y más en una sola app.":"Hunting, fishing, fortune teller, gathering and more in a single app.",
-      "Maneja varias ventanas a la vez sin que se estorben.":"Run several windows at once without them clashing.",
+      // Por qué / Lo que nos diferencia
+      "Lo que nos diferencia":"What makes us different",
+      "¿Por qué PoloBot?":"Why PoloBot?",
+      "Ocho razones por las que jugadores de Metin2 eligen automatizar con PoloBot.":"Eight reasons why Metin2 players choose to automate with PoloBot.",
+      "Cualquier servidor":"Any server",
+      "Funciona en servidores oficiales y privados, sin depender de versiones ni parches del cliente.":"Works on official and private servers, without depending on client versions or patches.",
+      "No modifica el juego":"Doesn't modify the game",
+      "Trabaja por fuera — no inyecta nada en el cliente ni altera archivos. Discreto y estable.":"Works externally — injects nothing into the client and alters no files. Discreet and stable.",
+      "Listo en 1 minuto":"Ready in 1 minute",
+      "Sin mods, sin compilar, sin configurar archivos. Descargas, abres y funciona.":"No mods, no compiling, no config files. Download, open and run.",
+      "Multicuenta":"Multi-account",
+      "Controla varias ventanas del juego a la vez, cada una con su propia configuración.":"Control multiple game windows at once, each with its own configuration.",
+      "Todo en uno":"All in one",
+      "Autocaza, pesca, vidente, barajas, recolector y más en una sola app, sin programas sueltos.":"Auto-hunt, fishing, fortune teller, decks, gatherer and more in one app, no separate programs.",
+      "Soporte real en español":"Real support in Spanish",
+      "Atención directa por Telegram. Respuestas de persona a persona, no de bots ni formularios.":"Direct attention on Telegram. Person-to-person replies, no bots or forms.",
       "Siempre actualizado":"Always updated",
-      "Recibe mejoras y arreglos automáticamente, con un clic.":"Get improvements and fixes automatically, with one click.",
-      "Soporte directo":"Direct support", "Te ayudamos por Telegram, rápido y de persona a persona.":"We help you on Telegram, fast and person to person.",
+      "Avisos automáticos de nuevas versiones. Un clic y listo — sin reinstalar, sin perder tu configuración.":"Automatic alerts for new versions. One click and done — no reinstalling, no losing your config.",
+      "Prueba gratis":"Try it free",
+      "1 día completo con acceso a todo antes de pagar. Sin compromiso, en tu propio servidor.":"A full day with access to everything before paying. No commitment, on your own server.",
+      "Ver planes y precios":"See plans & pricing",
+      "💬 Escríbenos":"💬 Message us",
+      // Confianza (legacy cards kept below)
+      "Confianza":"Trust",
       // Confianza
       "Tranquilidad":"Peace of mind", "Compra con confianza":"Buy with confidence",
       "Sabemos que confiar en una herramienta así da respeto. Por eso te lo ponemos fácil, claro y transparente.":"We know trusting a tool like this is a big deal. That's why we make it easy, clear and transparent.",
